@@ -4,6 +4,7 @@ class Inventory:
 class Customer:
 
 class Admin:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, mokhtalet) :
+        self.mokh = mokhtalet
+        
 
