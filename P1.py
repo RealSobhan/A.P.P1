@@ -16,9 +16,34 @@ class Pay:
         self.cvv2 = cvv2
         self.expire_date = expire_date
         self.gmail = gmail
-        self.code_peygiri = None
-        self.tarikh_sabt_sefaresh = None
-        if
+        self.tracking_code = None
+        self.order_date = None
+        self.confirm = False
+        #self.total_price = total_price
+
+
+        if not isinstance(int, card_number): #validate card number
+            return "Enter numbers for card number!"
+        elif isinstance(int, card_number):
+            if len(str(card_number)) != 16:
+                return "Enter Valid Card Number!"
+            else:
+                pass
+
+
+        if not isinstance(int, cvv2):
+            return "Enter numbers for cvv2!"
+        elif isinstance(int, cvv2):
+            if (len(str(cvv2)) != 3) or (len(str(cvv2)) != 4):
+                return "Enter valid numbers for cvv2"
+
+
+
+
+
+
+
+
             self.code_peygiri = np.random()
             self.tarikh_sabt_sefaresh = time.now()
 class Address:
