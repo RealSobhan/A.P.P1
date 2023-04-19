@@ -18,7 +18,7 @@ class Pay:
         self.gmail = gmail
         self.code_peygiri = None
         self.tarikh_sabt_sefaresh = None
-        if confirm:
+        if 
             self.code_peygiri = np.random()
             self.tarikh_sabt_sefaresh = time.now()
 class Address:
