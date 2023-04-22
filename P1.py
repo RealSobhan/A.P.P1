@@ -6,7 +6,18 @@ class Customer:
 
 class Admin:
 
-class Product: #kimia
+class Product:
+    def __init__(self, name, price, color, size, material):
+        self.name = name
+        self.price = price
+        self.color = color
+        self.size = size
+        self.material = material
+        
+        
+    def __str__(self):
+        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price})"
+    
 
 
 class Cart:
