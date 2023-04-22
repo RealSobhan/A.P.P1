@@ -162,7 +162,15 @@ pay = Pay(customer.first_name, customer.last_name)
 
 
 class Address:
-    def __init__(self, state, city, delivery_time, overall_address, postal_code, block, house_number, phone_number, ):
+    def __init__(self, state, city, delivery_time, overall_address, postal_code, phone_number, tahvil_girande):
+        self.state = get_state()
+        self.city = get_city()
+        self.overall_address = get_address()
+        self.postal_code = get_postal_code()
+        self.phone_number = phone_number
+        self.tahvil_girande = tahvil_girande
+
+
 """
 class Factor:
     def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
