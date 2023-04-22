@@ -65,17 +65,19 @@ def validate_email(email):
 
 
 class Pay:
-    def __init__(self):
-        self.confirm = True
+    def __init__(self, c_first_name, c_last_name):
+        self.confirm_card_number = True
+        self.confirm_cvv2 = True
+        self.confirm_expire_date = True
         self.card_number = self.get_card_number()
         self.cvv2 = self.get_cvv2()
         self.expire_date = self.get_expire_date()
         self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
+        self.factor = self.get_factor(c_first_name, c_last_name)
     def get_card_number(self):
         count = 0
-        while count <= 5 and self.confirm:
+        while count <= 5 and self.confirm_card_number:
             try:
                 card_number = int(input("Enter your card number here: "))  # Validate card number
             except ValueError:
@@ -93,11 +95,11 @@ class Pay:
             return card_number
         with open('notes.txt', 'w') as f:
             f.write('fail for card num.')
-        self.confirm = False
+        self.confirm_card_number = False
 
     def get_cvv2(self):
         count = 0
-        while count <= 2 and self.confirm:
+        while count <= 2 and self.confirm_cvv2:
             try:
                 cvv2 = int(input("Enter your cvv2 here: "))  # Validate cvv2
             except ValueError:
@@ -112,13 +114,13 @@ class Pay:
                 # Write more text to the file
                 f.write('\nsuc for ccv2.')
             return cvv2
-        self.confirm = False
+        self.confirm_cvv2 = False
         with open('notes.txt', 'a') as f:
             f.write('\nfail for ccv2.')
 
     def get_expire_date(self):
         count = 0
-        while count <= 2 and self.confirm:
+        while count <= 2 and self.confirm_expire_date:
             expire_date = input("Enter your cards expire date in (YYYY-MM-DD) format: ")
             try:
                 date_obj = datetime.strptime(expire_date, "%Y-%m-%d")
@@ -128,15 +130,17 @@ class Pay:
                 continue
                 f.write('\nsuc for exp date.')
             return expire_date
-        self.confirm = False
+        self.confirm_expire_date = False
         with open('notes.txt', 'a') as f:
             f.write('\nfail for exp date.')
-    def get_factor(self, first_name, last_name, card_number, tracking_code, order_date):
+    def get_factor(self, first_name, last_name):
+        with open('notes.txt', 'a') as f:
+            f.write(f'\nname is {first_name} {last_name} and card number is {self.card_number} with {self.tracking_code} code in {self.order_date}')
 
 
 
 
-pay = Pay()
+pay = Pay("ali", "aghaei")
 
 """
     def
