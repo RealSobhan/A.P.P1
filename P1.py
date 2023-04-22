@@ -86,7 +86,13 @@ class Pay:
                 print("Error: Enter Valid Card Number!")
                 count += 1
                 continue
+
+            with open('notes.txt', 'w') as f:
+                f.write('suc for card num.')
+
             return card_number
+        with open('notes.txt', 'w') as f:
+            f.write('fail for card num.')
         self.confirm = False
 
     def get_cvv2(self):
@@ -102,9 +108,14 @@ class Pay:
                 print("Error: Enter Valid cvv2!")
                 count += 1
                 continue
+            with open('notes.txt', 'a') as f:
+                # Write more text to the file
+                f.write('\nsuc for ccv2.')
             return cvv2
         self.confirm = False
-        print('ccccccccc')
+        with open('notes.txt', 'a') as f:
+            # Write more text to the file
+            f.write('\nfail for ccv2.')
 
     def get_expire_date(self):
         count = 0
@@ -116,9 +127,13 @@ class Pay:
                 print("Error: Enter in date format!")
                 count += 1
                 continue
+                # Write more text to the file
+                f.write('\nsuc for exp date.')
             return expire_date
         self.confirm = False
-        print("failed")
+        with open('notes.txt', 'a') as f:
+            # Write more text to the file
+            f.write('\nfail for exp date.')
 
 
 pay = Pay()
