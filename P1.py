@@ -66,16 +66,16 @@ def validate_email(email):
 
 class Pay:
     def __init__(self):
+        self.confirm = True
         self.card_number = self.get_card_number()
         self.cvv2 = self.get_cvv2()
         self.expire_date = self.get_expire_date()
-        self.tracking_code = random_number_with_n_digits(10) #code peygiri az taraf banke 10 raghami
+        self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.confirm = True
 
     def get_card_number(self):
         count = 0
-        while count <= 5:
+        while count <= 5 and self.confirm:
             try:
                 card_number = int(input("Enter your card number here: "))  # Validate card number
             except ValueError:
@@ -87,10 +87,11 @@ class Pay:
                 count += 1
                 continue
             return card_number
+        self.confirm = False
 
     def get_cvv2(self):
         count = 0
-        while count <= 2:
+        while count <= 2 and self.confirm:
             try:
                 cvv2 = int(input("Enter your cvv2 here: "))  # Validate cvv2
             except ValueError:
@@ -102,10 +103,12 @@ class Pay:
                 count += 1
                 continue
             return cvv2
+        self.confirm = False
+        print('ccccccccc')
 
     def get_expire_date(self):
         count = 0
-        while count <= 2:
+        while count <= 2 and self.confirm:
             expire_date = input("Enter your cards expire date in (YYYY-MM-DD) format: ")
             try:
                 date_obj = datetime.strptime(expire_date, "%Y-%m-%d")
@@ -114,12 +117,11 @@ class Pay:
                 count += 1
                 continue
             return expire_date
+        self.confirm = False
+        print("failed")
 
 
 pay = Pay()
-print(pay.expire_date)
-print(pay.card_number)
-print(pay.order_date)
 
 """
     def
