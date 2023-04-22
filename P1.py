@@ -76,6 +76,13 @@ class Warehouse:
                (not max_price or product.price <= max_price):
                 results.append(product)
         return results
+    
+    def get_products_by_color(self, color):
+        color_products = []
+        for product in self.products:
+            if product.color == color:
+                color_products.append(product)
+        return color_products
 
 
 
