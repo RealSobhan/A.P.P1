@@ -59,7 +59,7 @@ def validate_email(email):
 class Pay:
     def __init__(self, gmail = None):
         self.card_number = self.get_card_number()
-        self.cvv2 = self.cvv2()
+        self.cvv2 = self.get_cvv2()
         #self.expire_date = expire_date
         #self.gmail = gmail
         #self.tracking_code = random_number_with_n_digits(10) #code peygiri az taraf banke 10 raghami
@@ -81,14 +81,15 @@ class Pay:
             else:
                 return card_number
 
-    def validate_cvv2(self):
+    def get_cvv2(self):
         while True:
             try:
-                cvv2 = int(input("Enter your cvv2 here: ")) #Validate card number
+                cvv2 = int(input("Enter your cvv2 here: ")) #Validate cvv2
             except:
                 print("Error: Enter numbers for cvv2!")
                 continue
-            if (len(str(cvv2)) != 3) or (len(str(cvv2)) != 4):
+            print((len(str(cvv2))))
+            if (len(str(cvv2)) != 3) and (len(str(cvv2)) != 4):
                 print("Error: Enter Valid cvv2!")
                 continue
             else:
