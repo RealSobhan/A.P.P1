@@ -97,6 +97,13 @@ class Warehouse:
             if product.size == size:
                 size_products.append(product)
         return size_products
+    
+    def get_products_by_price_range(self, min_price, max_price):
+        price_range_products = []
+        for product in self.products:
+            if min_price <= product.price <= max_price:
+                price_range_products.append(product)
+        return price_range_products
 
 
 
