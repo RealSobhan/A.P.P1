@@ -1,5 +1,6 @@
 from random import randint
 import re
+from datetime import datetime
 """class Inventory:
 
 class Customer:
@@ -60,7 +61,7 @@ class Pay:
     def __init__(self, gmail = None):
         self.card_number = self.get_card_number()
         self.cvv2 = self.get_cvv2()
-        #self.expire_date = expire_date
+        self.expire_date = self.get_expire_date()
         #self.gmail = gmail
         #self.tracking_code = random_number_with_n_digits(10) #code peygiri az taraf banke 10 raghami
         #self.order_date = None
@@ -72,28 +73,39 @@ class Pay:
         while True:
             try:
                 card_number = int(input("Enter your card number here: ")) #Validate card number
-            except:
+            except ValueError:
                 print("Error: Enter numbers for card number!")
                 continue
             if len(str(card_number)) != 16:
                 print("Error: Enter Valid Card Number!")
                 continue
-            else:
-                return card_number
+            return card_number
 
     def get_cvv2(self):
         while True:
             try:
                 cvv2 = int(input("Enter your cvv2 here: ")) #Validate cvv2
-            except:
+            except ValueError:
                 print("Error: Enter numbers for cvv2!")
                 continue
-            print((len(str(cvv2))))
             if (len(str(cvv2)) != 3) and (len(str(cvv2)) != 4):
                 print("Error: Enter Valid cvv2!")
                 continue
-            else:
-                return cvv2
+            return cvv2
+
+    def get_expire_date(self):
+        while True:
+            expire_date = input("Enter your cards expire date in (YYYY-MM-DD) format: ")
+            try:
+                date_obj = datetime.strptime(expire_date, "%Y-%m-%d")
+            except ValueError:
+                print("Error: Enter in date format!")
+                continue
+            return expire_date
+pay = Pay()
+print(pay.expire_date)
+print(pay.card_number)
+print(pay.cvv2)
 
 """
     def
@@ -115,4 +127,3 @@ class Address:
 class Factor:
     def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
 """
-pay = Pay()
