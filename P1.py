@@ -58,6 +58,14 @@ class Warehouse:
                 self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
         else:
             print("Warehouse is at full capacity.")
+            
+    def remove_item(self, item_code, quantity):
+        if item_code not in self.inventory:
+            return False
+        if self.inventory[item_code]['quantity'] < quantity:
+            return False
+        self.inventory[item_code]['quantity'] -= quantity
+        return True
 
 
 
