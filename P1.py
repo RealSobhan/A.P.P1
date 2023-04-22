@@ -62,9 +62,9 @@ class Warehouse:
     def remove_item(self, item_code, quantity):
         if item_code not in self.inventory:
             return False
-        if self.inventory[item_code]['quantity'] < quantity:
+        if self.inventory[item_code]['stock'] < quantity:
             return False
-        self.inventory[item_code]['quantity'] -= quantity
+        self.inventory[item_code]['stock'] -= quantity
         return True
 
 
