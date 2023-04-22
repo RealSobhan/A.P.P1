@@ -6,7 +6,7 @@ class Customer:
 
 class Admin:
 
-class Product:
+class Product: #kimia
 
 
 class Cart:
