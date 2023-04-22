@@ -75,9 +75,9 @@ class Pay:
         self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.factor = self.get_factor(c_first_name, c_last_name)
-    def get_card_number(self):
+    def get_card_number(self): #password chon hichi nadasht felan naneveshtamesh
         count = 0
-        while count <= 5 and self.confirm_card_number:
+        while count <= 2 and self.confirm_card_number:
             try:
                 card_number = int(input("Enter your card number here: "))  # Validate card number
             except ValueError:
@@ -89,17 +89,13 @@ class Pay:
                 count += 1
                 continue
 
-            with open('notes.txt', 'w') as f:
-                f.write('suc for card num.')
-
             return card_number
-        with open('notes.txt', 'w') as f:
-            f.write('fail for card num.')
         self.confirm_card_number = False
+        return card_number
 
     def get_cvv2(self):
         count = 0
-        while count <= 2 and self.confirm_cvv2:
+        while count <= 1 and self.confirm_cvv2:
             try:
                 cvv2 = int(input("Enter your cvv2 here: "))  # Validate cvv2
             except ValueError:
@@ -110,17 +106,14 @@ class Pay:
                 print("Error: Enter Valid cvv2!")
                 count += 1
                 continue
-            with open('notes.txt', 'a') as f:
-                # Write more text to the file
-                f.write('\nsuc for ccv2.')
+
             return cvv2
         self.confirm_cvv2 = False
-        with open('notes.txt', 'a') as f:
-            f.write('\nfail for ccv2.')
+        return cvv2
 
     def get_expire_date(self):
         count = 0
-        while count <= 2 and self.confirm_expire_date:
+        while count <= 1 and self.confirm_expire_date:
             expire_date = input("Enter your cards expire date in (YYYY-MM-DD) format: ")
             try:
                 date_obj = datetime.strptime(expire_date, "%Y-%m-%d")
@@ -128,14 +121,33 @@ class Pay:
                 print("Error: Enter in date format!")
                 count += 1
                 continue
-                f.write('\nsuc for exp date.')
             return expire_date
         self.confirm_expire_date = False
-        with open('notes.txt', 'a') as f:
-            f.write('\nfail for exp date.')
+        return expire_date
     def get_factor(self, first_name, last_name):
-        with open('notes.txt', 'a') as f:
-            f.write(f'\nname is {first_name} {last_name} and card number is {self.card_number} with {self.tracking_code} code in {self.order_date}')
+        with open('notes.txt', 'w') as f:
+            f.write(f'First Name: {first_name}\nLast Name: {last_name}\n')
+            if not self.confirm_card_number:
+                with open('notes.txt', 'a') as f:
+                    f.write(f'Card Number: {self.card_number}                                                          Card Number Status: Rejected')
+            if self.confirm_card_number:
+                with open('notes.txt', 'a') as f:
+                    f.write(f'Card Number: {self.card_number}                                                          Card Number Status: Accepted')
+            if not self.confirm_cvv2:
+                with open('notes.txt', 'a') as f:
+                    f.write(f'\ncvv2:{self.cvv2}                             cvv2 Status: Rejected')
+            if self.confirm_cvv2:
+                with open('notes.txt', 'a') as f:
+                    f.write(f'\ncvv2:{self.cvv2}                             cvv2 Status: Accepted')
+            if not self.confirm_expire_date:
+                with open('notes.txt', 'a') as f:
+                    f.write(f'\nExpire Date:{self.expire_date}                 Expire Date Status: Rejected')
+            if self.confirm_expire_date:
+                print(self.expire_date)
+                with open('notes.txt', 'a') as f:
+                    f.write(f'\nExpire Date:{self.expire_date}                 Expire Date Status: Accepted')
+
+
 
 
 
