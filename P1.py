@@ -90,6 +90,13 @@ class Warehouse:
             if product.material == material:
                 material_products.append(product)
         return material_products
+    
+    def get_products_by_size(self, size):
+        size_products = []
+        for product in self.products:
+            if product.size == size:
+                size_products.append(product)
+        return size_products
 
 
 
