@@ -114,7 +114,6 @@ class Pay:
             return cvv2
         self.confirm = False
         with open('notes.txt', 'a') as f:
-            # Write more text to the file
             f.write('\nfail for ccv2.')
 
     def get_expire_date(self):
@@ -127,13 +126,14 @@ class Pay:
                 print("Error: Enter in date format!")
                 count += 1
                 continue
-                # Write more text to the file
                 f.write('\nsuc for exp date.')
             return expire_date
         self.confirm = False
         with open('notes.txt', 'a') as f:
-            # Write more text to the file
             f.write('\nfail for exp date.')
+    def get_factor(self, first_name, last_name, card_number, tracking_code, order_date):
+
+
 
 
 pay = Pay()
