@@ -71,40 +71,47 @@ class Pay:
         self.expire_date = self.get_expire_date()
         self.tracking_code = random_number_with_n_digits(10) #code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        # self.confirm = False
-        # self.total_price = total_price
+        self.confirm = True
 
     def get_card_number(self):
-        while True:
+        count = 0
+        while count <= 5:
             try:
                 card_number = int(input("Enter your card number here: "))  # Validate card number
             except ValueError:
                 print("Error: Enter numbers for card number!")
+                count += 1
                 continue
             if len(str(card_number)) != 16:
                 print("Error: Enter Valid Card Number!")
+                count += 1
                 continue
             return card_number
 
     def get_cvv2(self):
-        while True:
+        count = 0
+        while count <= 2:
             try:
                 cvv2 = int(input("Enter your cvv2 here: "))  # Validate cvv2
             except ValueError:
                 print("Error: Enter numbers for cvv2!")
+                count += 1
                 continue
             if (len(str(cvv2)) != 3) and (len(str(cvv2)) != 4):
                 print("Error: Enter Valid cvv2!")
+                count += 1
                 continue
             return cvv2
 
     def get_expire_date(self):
-        while True:
+        count = 0
+        while count <= 2:
             expire_date = input("Enter your cards expire date in (YYYY-MM-DD) format: ")
             try:
                 date_obj = datetime.strptime(expire_date, "%Y-%m-%d")
             except ValueError:
                 print("Error: Enter in date format!")
+                count += 1
                 continue
             return expire_date
 
