@@ -43,6 +43,22 @@ class Product:
     def __str__(self):
         return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
     
+class Warehouse:
+    def __init__(self, name, location, capacity):
+        self.name = name
+        self.location = location
+        self.capacity = capacity
+        self.products = {}
+        
+    def add_item(self, item_code, item_name, price, color, size, material, quantity):
+        if len(self.products) < self.capacity:
+            if item_code in self.inventory:
+                self.inventory[item_code]['stock'] += quantity
+            else:
+                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
+        else:
+            print("Warehouse is at full capacity.")
+
 
 
 class Cart:
