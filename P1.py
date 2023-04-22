@@ -27,6 +27,18 @@ class Product:
 
     def update_price(self, new_price):
         self.price = new_price
+        
+    def to_dict(self):
+        return {
+            "code": self.code,
+            "name": self.name,
+            "price": self.price,
+            "color": self.color,
+            "size": self.size,
+            "material": self.material,
+            "stock": self.stock,
+            "warehouse": self.warehouse
+        }
           
     def __str__(self):
         return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
