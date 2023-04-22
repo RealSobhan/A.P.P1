@@ -83,6 +83,13 @@ class Warehouse:
             if product.color == color:
                 color_products.append(product)
         return color_products
+    
+    def get_products_by_material(self, material):
+        material_products = []
+        for product in self.products:
+            if product.material == material:
+                material_products.append(product)
+        return material_products
 
 
 
