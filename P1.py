@@ -104,6 +104,9 @@ class Warehouse:
             if min_price <= product.price <= max_price:
                 price_range_products.append(product)
         return price_range_products
+    
+    def __str__(self):
+        return f"Warehouse at {self.location} - {len(self.products)} products"
 
 
 
