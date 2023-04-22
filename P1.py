@@ -66,6 +66,16 @@ class Warehouse:
             return False
         self.inventory[item_code]['stock'] -= quantity
         return True
+    
+    def search_products(self, material=None, color=None, size=None, max_price=None):
+        results = []
+        for product in self.products:
+            if (not material or product.material == material) and \
+               (not color or product.color == color) and \
+               (not size or product.size == size) and \
+               (not max_price or product.price <= max_price):
+                results.append(product)
+        return results
 
 
 
