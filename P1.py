@@ -7,16 +7,29 @@ class Customer:
 class Admin:
 
 class Product:
-    def __init__(self, name, price, color, size, material):
+    def __init__(self, code, name, price, color, size, material, stock, warehouse):
+        self.code = code
         self.name = name
         self.price = price
         self.color = color
         self.size = size
         self.material = material
+        self.stock = stock
+        self.warehouse = warehouse
         
-        
+    def add_stock(self, amount):
+        self.stock += amount
+    
+    def remove_stock(self, amount):
+        if self.stock - amount < 0:
+            raise ValueError("Not enough stock")
+        self.stock -= amount
+
+    def update_price(self, new_price):
+        self.price = new_price
+          
     def __str__(self):
-        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price})"
+        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
     
 
 
