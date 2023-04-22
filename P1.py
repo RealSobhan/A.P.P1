@@ -156,25 +156,14 @@ class Pay:
 
 
 
-pay = Pay("ali", "aghaei")
-
-"""
-    def
+pay = Pay(customer.first_name, customer.last_name)
 
 
 
 
-
-
-
-
-            self.code_peygiri = np.random()
-            self.tarikh_sabt_sefaresh = time.now()
-"""
-"""
 class Address:
-    def __init__(self, sharestan, shahr, baze_tahvil, addrees_koli, code_posti, pelak, vahed, phone_number, tahvil_girande):
-
+    def __init__(self, state, city, delivery_time, overall_address, postal_code, block, house_number, phone_number, ):
+"""
 class Factor:
     def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
 """
