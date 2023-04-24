@@ -9,6 +9,122 @@ class Customer:
 class Admin:
 
 class Product:
+    def __init__(self, code, name, price, color, size, material, stock, warehouse):
+        self.code = code
+        self.name = name
+        self.price = price
+        self.color = color
+        self.size = size
+        self.material = material
+        self.stock = stock
+        #self.warehouse = warehouse
+"""
+    def add_stock(self, amount):
+        self.stock += amount
+    
+    def remove_stock(self, amount):
+        if self.stock - amount < 0:
+            raise ValueError("Not enough stock")
+        self.stock -= amount
+
+    def update_price(self, new_price):
+        self.price = new_price
+        
+    def to_dict(self):
+        return {
+            "code": self.code,
+            "name": self.name,
+            "price": self.price,
+            "color": self.color,
+            "size": self.size,
+            "material": self.material,
+            "stock": self.stock,
+            "warehouse": self.warehouse
+        }
+          
+    def __str__(self):
+        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
+"""    
+class Warehouse:
+    def __init__(self, name, location, capacity):
+        self.name = name
+        self.location = location
+        self.capacity = capacity
+        self.products = {}
+"""
+bayad ye object az product be in def paas dade beshe 
+    def add_item(self, product_obj):
+        if len(self.products) < self.capacity:
+            if item_code in self.products:
+                self.products[product_obj.code]['stock'] += quantity
+            else:
+                self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
+                'color': product.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
+        else:
+            print("Warehouse is at full capacity.")
+"""
+    #ye def update gheymat bayad neveshte beshe
+    def add_item(self, item_code, item_name, price, color, size, material, quantity):
+        if len(self.products) < self.capacity:
+            if item_code in self.inventory:
+                self.inventory[item_code]['stock'] += quantity
+            else:
+                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
+        else:
+            print("Warehouse is at full capacity.")
+            
+    def remove_item(self, item_code, quantity):
+        if item_code not in self.products:
+            return False
+        if self.products[item_code]['stock'] < quantity:
+            return False
+        self.products[item_code]['stock'] -= quantity
+        return True
+    
+    def update_price(self, item_code, new_price):
+        self.products[item_code]["price"] = new_price
+    
+    def search_products(self, material=None, color=None, size=None, max_price=None):
+        results = []
+        for product in self.products:
+            if (not material or product.material == material) and \
+               (not color or product.color == color) and \
+               (not size or product.size == size) and \
+               (not max_price or product.price <= max_price):
+                results.append(product)
+        return results
+    
+    def get_products_by_color(self, color):
+        color_products = []
+        for product in self.products:
+            if product.color == color:
+                color_products.append(product)
+        return color_products
+    
+    def get_products_by_material(self, material):
+        material_products = []
+        for product in self.products:
+            if product.material == material:
+                material_products.append(product)
+        return material_products
+    
+    def get_products_by_size(self, size):
+        size_products = []
+        for product in self.products:
+            if product.size == size:
+                size_products.append(product)
+        return size_products
+    
+    def get_products_by_price_range(self, min_price, max_price):
+        price_range_products = []
+        for product in self.products:
+            if min_price <= product.price <= max_price:
+                price_range_products.append(product)
+        return price_range_products
+    
+    def __str__(self):
+        return f"Warehouse at {self.location} - {len(self.products)} products"
+
 
 
 class Cart:
