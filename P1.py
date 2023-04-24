@@ -272,25 +272,47 @@ class Pay:
 
 
 
-pay = Pay("ali", "aghaei")
-
-"""
-    def
+#pay = Pay(customer.first_name, customer.last_name)
 
 
 
 
-
-
-
-
-            self.code_peygiri = np.random()
-            self.tarikh_sabt_sefaresh = time.now()
-"""
-"""
 class Address:
-    def __init__(self, sharestan, shahr, baze_tahvil, addrees_koli, code_posti, pelak, vahed, phone_number, tahvil_girande):
+    def __init__(self, phone_number, tahvil_girande):
+        self.state = self.get_state()
+        self.city = self.get_city(self.state)
+        #self.overall_address = get_address()
+        #self.postal_code = get_postal_code()
+        self.phone_number = phone_number
+        self.tahvil_girande = tahvil_girande
+        #self.delivery_type = delivery_type()
 
+
+    def get_state(self):
+        while True:
+            print("\nPlease choice your state from following choices:\n1.Tehran\n2.Esfehan\n3.Tabriz")
+            choice = int(input("Enter your choice here: "))
+            if choice == 1:
+                return "Tehran"
+            elif choice == 2:
+                return "Esfehan"
+            elif choice == 3:
+                return "Tabriz"
+            else:
+                print("Invalid choice number!")
+    def get_city(self, state):
+
+        while True:
+            if state == "Tehran":
+                print("\nPlease choice your city from following choices:\n1.Tehran\n2.")
+
+
+
+
+address = Address("09122900757", "ali")
+
+
+"""
 class Factor:
     def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
 """
