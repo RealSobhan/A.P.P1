@@ -15,8 +15,8 @@ class Product:
         self.size = size
         self.material = material
         self.stock = stock
-        self.warehouse = warehouse
-        
+        #self.warehouse = warehouse
+"""
     def add_stock(self, amount):
         self.stock += amount
     
@@ -42,7 +42,7 @@ class Product:
           
     def __str__(self):
         return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
-    
+"""    
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
@@ -57,10 +57,11 @@ bayad ye object az product be in def paas dade beshe
                 self.products[product_obj.code]['stock'] += quantity
             else:
                 self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
-                'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
+                'color': product.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
 """
+    #ye def update gheymat bayad neveshte beshe
     def add_item(self, item_code, item_name, price, color, size, material, quantity):
         if len(self.products) < self.capacity:
             if item_code in self.inventory:
@@ -70,12 +71,12 @@ bayad ye object az product be in def paas dade beshe
         else:
             print("Warehouse is at full capacity.")
             
-    def remove_item(self, ):
-        if item_code not in self.inventory:
+    def remove_item(self, item_code, quantity):
+        if item_code not in self.products:
             return False
-        if self.inventory[item_code]['stock'] < quantity:
+        if self.products[item_code]['stock'] < quantity:
             return False
-        self.inventory[item_code]['stock'] -= quantity
+        self.products[item_code]['stock'] -= quantity
         return True
     
     def search_products(self, material=None, color=None, size=None, max_price=None):
