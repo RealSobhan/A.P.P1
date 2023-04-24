@@ -185,9 +185,12 @@ class Address:
             else:
                 print("Invalid choice number!")
     def get_city(self, state):
+
         while True:
-            print(state)
-            return
+            if state == "Tehran":
+                print("\nPlease choice your city from following choices:\n1.Tehran\n2.")
+
+
 
 
 address = Address("09122900757", "ali")
