@@ -156,19 +156,41 @@ class Pay:
 
 
 
-pay = Pay(customer.first_name, customer.last_name)
+#pay = Pay(customer.first_name, customer.last_name)
 
 
 
 
 class Address:
-    def __init__(self, state, city, delivery_time, overall_address, postal_code, phone_number, tahvil_girande):
-        self.state = get_state()
-        self.city = get_city()
-        self.overall_address = get_address()
-        self.postal_code = get_postal_code()
+    def __init__(self, phone_number, tahvil_girande):
+        self.state = self.get_state()
+        self.city = self.get_city(self.state)
+        #self.overall_address = get_address()
+        #self.postal_code = get_postal_code()
         self.phone_number = phone_number
         self.tahvil_girande = tahvil_girande
+        #self.delivery_type = delivery_type()
+
+
+    def get_state(self):
+        while True:
+            print("\nPlease choice your state from following choices:\n1.Tehran\n2.Esfehan\n3.Tabriz")
+            choice = int(input("Enter your choice here: "))
+            if choice == 1:
+                return "Tehran"
+            elif choice == 2:
+                return "Esfehan"
+            elif choice == 3:
+                return "Tabriz"
+            else:
+                print("Invalid choice number!")
+    def get_city(self, state):
+        while True:
+            print(state)
+            return
+
+
+address = Address("09122900757", "ali")
 
 
 """
