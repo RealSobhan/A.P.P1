@@ -7,7 +7,7 @@ from datetime import datetime
 class Customer:
 
 class Admin:
-
+"""
 class Product:
     def __init__(self, code, name, price, color, size, material, stock, warehouse):
         self.code = code
@@ -18,7 +18,7 @@ class Product:
         self.material = material
         self.stock = stock
         #self.warehouse = warehouse
-"""
+
     def add_stock(self, amount):
         self.stock += amount
     
