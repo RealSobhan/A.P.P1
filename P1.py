@@ -79,6 +79,9 @@ bayad ye object az product be in def paas dade beshe
         self.products[item_code]['stock'] -= quantity
         return True
     
+    def update_price(self, item_code, new_price):
+        self.products[item_code]["price"] = new_price
+    
     def search_products(self, material=None, color=None, size=None, max_price=None):
         results = []
         for product in self.products:
