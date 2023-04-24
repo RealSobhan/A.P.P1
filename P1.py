@@ -50,12 +50,14 @@ class Warehouse:
         self.capacity = capacity
         self.products = {}
 """
-    def add_item(self, product):
+bayad ye object az product be in def paas dade beshe 
+    def add_item(self, product_obj):
         if len(self.products) < self.capacity:
             if item_code in self.products:
-                self.products[product.code]['stock'] += quantity
+                self.products[product_obj.code]['stock'] += quantity
             else:
-                self.products[product.code] = {'item_name': product.name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
+                self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
+                'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
 """
@@ -68,7 +70,7 @@ class Warehouse:
         else:
             print("Warehouse is at full capacity.")
             
-    def remove_item(self, item_code, quantity):
+    def remove_item(self, ):
         if item_code not in self.inventory:
             return False
         if self.inventory[item_code]['stock'] < quantity:
