@@ -49,7 +49,16 @@ class Warehouse:
         self.location = location
         self.capacity = capacity
         self.products = {}
-        
+"""
+    def add_item(self, product):
+        if len(self.products) < self.capacity:
+            if item_code in self.products:
+                self.products[product.code]['stock'] += quantity
+            else:
+                self.products[product.code] = {'item_name': product.name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
+        else:
+            print("Warehouse is at full capacity.")
+"""
     def add_item(self, item_code, item_name, price, color, size, material, quantity):
         if len(self.products) < self.capacity:
             if item_code in self.inventory:
