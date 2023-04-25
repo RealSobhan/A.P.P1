@@ -1,10 +1,32 @@
-class Inventory:
+from random import uniform
+#class Inventory:
 
-class Customer:
+class customer :
+    def __init__(self) :
+        self.shopping_cart = Cart()
+        self.got_discount = False
+    
+    def get_discount(self) :
+        discount = uniform(0,0.5)
+        first_price = self.shopping_cart.total_cost()
+        second_price = first_price * (1 - discount)
+        self.got_discount = True
+        return second_price        
+    
+    def purchase(self) :
+        if self.got_discount == True :
+            res = self.get_discount()
+        else :
+            res = self.shopping_cart.total_cost()
+        print(f"you should pay {res } for items in your cart")
+        return res
 
-class Admin:
 
-class Product:
+
+#class Admin:
+
+#class Product:
+
 
 # ajnas dakhele cart tu ye dictionary rikhte mishan ke key haye dictionary esme jens va value haye dictionary tuple hastan
 # tuple[0] = tedad , tuple[1] = gheymate oon tedad jens
@@ -50,11 +72,11 @@ class Cart:
         
         
 
-class Pay:
-    def __init__(self, card_number, cvv2, expire_date, gmail= None):
+#class Pay:
+#    def __init__(self, card_number, cvv2, expire_date, gmail= None):
 
-class Address:
-    def __init__(self, sharestan, shahr, baze_tahvil, addrees_koli, code_posti, pelak, vahed, phone_number, tahvil_girande):
+#class Address:
+#    def __init__(self, sharestan, shahr, baze_tahvil, addrees_koli, code_posti, pelak, vahed, phone_number, tahvil_girande):
 
-class Factor:
-    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
+#class Factor:
+#    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
