@@ -165,10 +165,10 @@ class Address:
     def __init__(self, phone_number, tahvil_girande):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
-        #self.overall_address = get_address()
-        #self.postal_code = get_postal_code()
+        self.overall_address = self.get_address()
+        self.postal_code = self.get_postal_code()
         self.phone_number = phone_number
-        self.tahvil_girande = tahvil_girande
+        self.tahvil_girande = recive
         #self.delivery_type = delivery_type()
 
 
@@ -185,10 +185,38 @@ class Address:
             else:
                 print("Invalid choice number!")
     def get_city(self, state):
-
         while True:
             if state == "Tehran":
-                print("\nPlease choice your city from following choices:\n1.Tehran\n2.")
+                print("\nPlease choice your city from following choices:\n1.Tehran\n2.EslamShahr")
+                city = int(input("Enter your choice here: "))
+                return city
+            elif state == "Esfehan":
+                print("\nPlease choice your city from following choices:\n1.Esfehan\n2.Kashan")
+                city = int(input("Enter your choice here: "))
+                return city
+            elif state == "Tabriz":
+                print("\nPlease choice your city from following choices:\n1.Tabriz\n2.Shabestar")
+                city = int(input("Enter your choice here: "))
+                return city
+    def get_address(self):
+        while True:
+            print("\nPlease enter your address:\n1.Tehran\n2.Esfehan\n3.Tabriz")
+            address = input("\nPlease enter your address here: ")
+            return address
+    def get_postal_code(self):
+        while True:
+            try:
+                postal_code = int(input("Enter your postal-code here: "))  # Validate card number
+            except ValueError:
+                print("Error: Enter numbers for postal-code!")
+                continue
+            if len(str(postal_code)) != 10:
+                print("Error: Enter Valid postal-code!")
+                continue
+        return postal_code
+
+
+
 
 
 
