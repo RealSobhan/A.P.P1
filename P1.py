@@ -162,14 +162,14 @@ class Pay:
 
 
 class Address:
-    def __init__(self, phone_number, tahvil_girande):
+    def __init__(self, phone_number, receiver):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
         self.overall_address = self.get_address()
         self.postal_code = self.get_postal_code()
-        self.phone_number = phone_number
-        self.tahvil_girande = recive
-        #self.delivery_type = delivery_type()
+        self.phone_number = self.phone_number()
+        self.receiver = self.receiver()
+        self.delivery_type = delivery_type()
 
 
     def get_state(self):
