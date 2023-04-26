@@ -200,26 +200,31 @@ class Address:
                 return city
     def get_address(self):
         while True:
-            print("\nPlease enter your address:\n1.Tehran\n2.Esfehan\n3.Tabriz")
-            address = input("\nPlease enter your address here: ")
+            address = input("Please enter your address here: ")
             return address
     def get_postal_code(self):
         while True:
             try:
-                postal_code = int(input("Enter your postal-code here: "))  # Validate card number
+                postal_code = int(input("Enter your postal-code here: "))  # Validate postal-code
             except ValueError:
                 print("Error: Enter numbers for postal-code!")
                 continue
             if len(str(postal_code)) != 10:
                 print("Error: Enter Valid postal-code!")
                 continue
-        return postal_code
+            return postal_code
     def get_receiver(self):
         while True:
-            print("\nPlease enter who will receive your product:")
+            print("Please enter who will receive your product:")
             receiver = input("Full Name: ")
             return receiver
     def get_phone_number(self):
+        while True:
+            phone_number = input("Enter your phone number in 09######## here: ") # Validate phone number
+            if len(str(phone_number)) != 11:
+                print("Error: Enter Valid phone number! phone number must be 10 digits")
+                continue
+            return phone_number
 
 
 
@@ -229,7 +234,9 @@ class Address:
 
 
 
-address = Address("09122900757", "ali")
+
+
+address = Address()
 
 
 """
