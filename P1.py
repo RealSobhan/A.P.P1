@@ -170,6 +170,7 @@ class Address:
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
         self.delivery_type = self.delivery_type()
+        self.delivery_time = self.delivery_time()
 
 
     def get_state(self):
@@ -225,8 +226,13 @@ class Address:
                 print("Error: Enter Valid phone number! phone number must be 10 digits")
                 continue
             return phone_number
-
-
+    def delivery_type(self, state):
+        if state == "Tehran":
+            delivery_type = "peyk"
+        else:
+            delivery_type = "post"
+        return delivery_type
+    def delivery_time(self, state, city):
 
 
 
