@@ -162,14 +162,14 @@ class Pay:
 
 
 class Address:
-    def __init__(self, phone_number, receiver):
+    def __init__(self):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
         self.overall_address = self.get_address()
         self.postal_code = self.get_postal_code()
-        self.phone_number = self.phone_number()
-        self.receiver = self.receiver()
-        self.delivery_type = delivery_type()
+        self.receiver = self.get_receiver()
+        self.phone_number = self.get_phone_number()
+        self.delivery_type = self.delivery_type()
 
 
     def get_state(self):
@@ -214,6 +214,14 @@ class Address:
                 print("Error: Enter Valid postal-code!")
                 continue
         return postal_code
+    def get_receiver(self):
+        while True:
+            print("\nPlease enter who will receive your product:")
+            receiver = input("Full Name: ")
+            return receiver
+    def get_phone_number(self):
+
+
 
 
 
