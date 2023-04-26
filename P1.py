@@ -1,6 +1,14 @@
 from random import randint
 import re
 from datetime import datetime
+import csv
+import csv
+
+def create_csv(csv_name, lst_header):
+    with open(f'{csv_name}.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(lst_header)
+    return "csv created"
 
 """class Inventory:
 
@@ -62,6 +70,12 @@ def validate_email(email):
     return bool(re.match(
         r"^[a-zA-Z0-9\.\_]+@((gmail)|(yahoo)|(outlook)|(hotmail)|(live)|([a-z]*\.*[a-z]+\.ac)|(chmail))\.((com)|(ir))$",
         email, re.IGNORECASE))
+
+def create_csv(csv_name, lst_header):
+    with open(f'{csv_name}.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(lst_header)
+    return "csv created"
 
 
 class Pay:
@@ -233,6 +247,8 @@ class Address:
             delivery_type = "post"
         return delivery_type
     def delivery_time(self, state, city):
+
+
 
 
 
