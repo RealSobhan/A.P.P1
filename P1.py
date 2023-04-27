@@ -169,7 +169,7 @@ class Pay:
         self.expire_date = self.get_expire_date()
         self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.Transaction = self.Transaction_info(c_first_name, c_last_name)
+        self.transaction_info(c_first_name, c_last_name)
     def get_card_number(self): #password chon hichi nadasht felan naneveshtamesh
         count = 0
         while count <= 2 and self.confirm_card_number:
@@ -219,7 +219,7 @@ class Pay:
             return expire_date
         self.confirm_expire_date = False
         return expire_date
-    def Transaction_info(self, first_name, last_name):
+    def transaction_info(self, first_name, last_name):
         with open('notes.txt', 'w') as f:
             f.write(f'First Name: {first_name}\nLast Name: {last_name}\n')
         if not self.confirm_card_number:
