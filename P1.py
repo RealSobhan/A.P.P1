@@ -4,6 +4,9 @@ from datetime import datetime
 import csv
 import csv
 
+import pandas as pd
+
+
 def create_csv(csv_name, lst_header):
     with open(f'{csv_name}.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
@@ -183,7 +186,7 @@ class Address:
         self.postal_code = self.get_postal_code()
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
-        self.delivery_type = self.delivery_type()
+        self.delivery_type = self.delivery_type(self.state)
         self.delivery_time = self.delivery_time()
 
 
@@ -202,15 +205,15 @@ class Address:
     def get_city(self, state):
         while True:
             if state == "Tehran":
-                print("\nPlease choice your city from following choices:\n1.Tehran\n2.EslamShahr")
+                print("Please choice your city from following choices:\n1.Tehran\n2.EslamShahr")
                 city = int(input("Enter your choice here: "))
                 return city
             elif state == "Esfehan":
-                print("\nPlease choice your city from following choices:\n1.Esfehan\n2.Kashan")
+                print("Please choice your city from following choices:\n1.Esfehan\n2.Kashan")
                 city = int(input("Enter your choice here: "))
                 return city
             elif state == "Tabriz":
-                print("\nPlease choice your city from following choices:\n1.Tabriz\n2.Shabestar")
+                print("Please choice your city from following choices:\n1.Tabriz\n2.Shabestar")
                 city = int(input("Enter your choice here: "))
                 return city
     def get_address(self):
@@ -246,16 +249,25 @@ class Address:
         else:
             delivery_type = "post"
         return delivery_type
-    def delivery_time(self, state, city):
+    def delivery_time(self):
+        print("Available delivery times:")
+        create_csv("delivery_time", ["tracking_code", "sobh", "zohr", "asr"])
+        df = pd.read_csv("delivery_time.csv")
+        flag = True
+        sobh_capacity = df.iloc[:, 1:].sum()[0]
+        zohr_capacity = df.iloc[:, 1:].sum()[1]
+        asr_capacity = df.iloc[:, 1:].sum()[2]
+        print("1.sobh")
+        if zohr_capacity <= 3:
+            flag = False
+            print("2.Zhor")
+        if asr_capacity <= 3:
+            if flag:
+                print("2.asr")
+            else:
+                print("3.asr")
 
-
-
-
-
-
-
-
-
+        choice = input("Enter your choice here: ")  # Validate phone number
 
 
 address = Address()
