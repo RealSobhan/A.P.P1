@@ -1,6 +1,11 @@
 from random import randint
 import re
 from datetime import datetime
+import csv
+import pandas as pd
+
+
+
 
 """class Inventory:
 
@@ -126,58 +131,32 @@ bayad ye object az product be in def paas dade beshe
         return f"Warehouse at {self.location} - {len(self.products)} products"
 
 
-
 class Cart:
 
  pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
 """
-"""
 
-class Transaction:
-    def __init__(self):
-        self.transaction_type = self._get_transaction_type()
-        self.amount = self._get_amount()
-        self.description = self._get_description()
-
-    def _get_transaction_type(self):
-        while True:
-            transaction_type = input("Enter transaction type (debit/credit): ")
-            if transaction_type.lower() not in ['debit', 'credit']:
-                print("Error: Invalid transaction type. Please enter debit or credit.")
-                continue
-            return transaction_type.lower()
-
-    def _get_amount(self):
-        while True:
-            try:
-                amount = float(input("Enter transaction amount: "))
-            except ValueError:
-                print("Error: Invalid amount. Please enter a number.")
-                continue
-            return amount
-
-    def _get_description(self):
-        while True:
-            description = input("Enter transaction description: ")
-            if len(description) > 50:
-                print("Error: Description is too long. Please enter a shorter description.")
-                continue
-            return description
-
-"""
-
-
+def create_csv(csv_name, lst_header):
+    with open(f'{csv_name}.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(lst_header)
+    return "csv created"
 def random_number_with_n_digits(n):
     range_start = 10 ** (n - 1)
     range_end = (10 ** n) - 1
     return randint(range_start, range_end)
 
-
 def validate_email(email):
     return bool(re.match(
         r"^[a-zA-Z0-9\.\_]+@((gmail)|(yahoo)|(outlook)|(hotmail)|(live)|([a-z]*\.*[a-z]+\.ac)|(chmail))\.((com)|(ir))$",
         email, re.IGNORECASE))
+
+def create_csv(csv_name, lst_header):
+    with open(f'{csv_name}.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(lst_header)
+    return "csv created"
 
 
 class Pay:
@@ -278,15 +257,15 @@ class Pay:
 
 
 class Address:
-    def __init__(self, phone_number, tahvil_girande):
+    def __init__(self):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
-        #self.overall_address = get_address()
-        #self.postal_code = get_postal_code()
-        self.phone_number = phone_number
-        self.tahvil_girande = tahvil_girande
-        #self.delivery_type = delivery_type()
-
+        self.overall_address = self.get_address()
+        self.postal_code = self.get_postal_code()
+        self.receiver = self.get_receiver()
+        self.phone_number = self.get_phone_number()
+        self.delivery_type = self.delivery_type(self.state)
+        self.delivery_time = self.delivery_time()
 
     def get_state(self):
         while True:
@@ -301,15 +280,82 @@ class Address:
             else:
                 print("Invalid choice number!")
     def get_city(self, state):
-
         while True:
             if state == "Tehran":
-                print("\nPlease choice your city from following choices:\n1.Tehran\n2.")
+                print("Please choice your city from following choices:\n1.Tehran\n2.EslamShahr")
+                city = int(input("Enter your choice here: "))
+                return city
+            elif state == "Esfehan":
+                print("Please choice your city from following choices:\n1.Esfehan\n2.Kashan")
+                city = int(input("Enter your choice here: "))
+                return city
+            elif state == "Tabriz":
+                print("Please choice your city from following choices:\n1.Tabriz\n2.Shabestar")
+                city = int(input("Enter your choice here: "))
+                return city
+    def get_address(self):
+        while True:
+            address = input("Please enter your address here: ")
+            return address
+    def get_postal_code(self):
+        while True:
+            try:
+                postal_code = int(input("Enter your postal-code here: "))  # Validate postal-code
+            except ValueError:
+                print("Error: Enter numbers for postal-code!")
+                continue
+            if len(str(postal_code)) != 10:
+                print("Error: Enter Valid postal-code!")
+                continue
+            return postal_code
+    def get_receiver(self):
+        while True:
+            print("Please enter who will receive your product:")
+            receiver = input("Full Name: ")
+            return receiver
+    def get_phone_number(self):
+        while True:
+            phone_number = input("Enter your phone number in 09######## here: ") # Validate phone number
+            if len(str(phone_number)) != 11:
+                print("Error: Enter Valid phone number! phone number must be 10 digits")
+                continue
+            return phone_number
+    def delivery_type(self, state):
+        if state == "Tehran":
+            delivery_type = "peyk"
+        else:
+            delivery_type = "post"
+        return delivery_type
+    def delivery_time(self):
+        print("Available delivery times:")
+        try:
+            df = pd.read_csv("delivery_time.csv")
+        except FileNotFoundError:
+            create_csv("delivery_time", ["sobh", "zohr", "asr"])
+            df = pd.read_csv("delivery_time.csv")
+        zohr_capacity = df.iloc[:, 1:].sum()[0]
+        asr_capacity = df.iloc[:, 1:].sum()[1]
+        print("#.sobh")
+        if zohr_capacity < 3:
+            print("$.zhor")
+        if asr_capacity < 3:
+            print("*.asr")
 
+        choice = input("Enter your choice here: ")
+        if choice == "#":
+            new_row = pd.DataFrame({'sobh': [1], 'zohr': [0], 'asr': [0]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
+        elif choice == "$":
+            new_row = pd.DataFrame({'sobh': [0], 'zohr': [1], 'asr': [0]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
+        elif choice == "*":
+            new_row = pd.DataFrame({'sobh': [0], 'zohr': [0], 'asr': [1]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
 
-
-
-address = Address("09122900757", "ali")
+address = Address()
 
 
 """
