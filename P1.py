@@ -5,11 +5,7 @@ import csv
 import pandas as pd
 
 
-def create_csv(csv_name, lst_header):
-    with open(f'{csv_name}.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(lst_header)
-    return "csv created"
+
 
 """class Inventory:
 
@@ -25,12 +21,15 @@ class Cart:
 
 """
 
-
+def create_csv(csv_name, lst_header):
+    with open(f'{csv_name}.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(lst_header)
+    return "csv created"
 def random_number_with_n_digits(n):
     range_start = 10 ** (n - 1)
     range_end = (10 ** n) - 1
     return randint(range_start, range_end)
-
 
 def validate_email(email):
     return bool(re.match(
