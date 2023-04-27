@@ -2,8 +2,6 @@ from random import randint
 import re
 from datetime import datetime
 import csv
-import csv
-
 import pandas as pd
 
 
@@ -21,44 +19,9 @@ class Admin:
 
 class Product:
 
-
 class Cart:
 
  pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
-
-"""
-"""
-
-class Transaction:
-    def __init__(self):
-        self.transaction_type = self._get_transaction_type()
-        self.amount = self._get_amount()
-        self.description = self._get_description()
-
-    def _get_transaction_type(self):
-        while True:
-            transaction_type = input("Enter transaction type (debit/credit): ")
-            if transaction_type.lower() not in ['debit', 'credit']:
-                print("Error: Invalid transaction type. Please enter debit or credit.")
-                continue
-            return transaction_type.lower()
-
-    def _get_amount(self):
-        while True:
-            try:
-                amount = float(input("Enter transaction amount: "))
-            except ValueError:
-                print("Error: Invalid amount. Please enter a number.")
-                continue
-            return amount
-
-    def _get_description(self):
-        while True:
-            description = input("Enter transaction description: ")
-            if len(description) > 50:
-                print("Error: Description is too long. Please enter a shorter description.")
-                continue
-            return description
 
 """
 
@@ -179,7 +142,7 @@ class Pay:
 
 
 class Address:
-    def __init__(self, tracking_code):
+    def __init__(self):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
         self.overall_address = self.get_address()
@@ -187,9 +150,7 @@ class Address:
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
         self.delivery_type = self.delivery_type(self.state)
-        self.delivery_time = self.delivery_time(tracking_code)
-
-
+        self.delivery_time = self.delivery_time()
 
     def get_state(self):
         while True:
@@ -250,15 +211,15 @@ class Address:
         else:
             delivery_type = "post"
         return delivery_type
-    def delivery_time(self, tracking_code):
+    def delivery_time(self):
         print("Available delivery times:")
         try:
             df = pd.read_csv("delivery_time.csv")
-        except ValueError:
-            create_csv("delivery_time", ["tracking_code", "sobh", "zohr", "asr"])
+        except FileNotFoundError:
+            create_csv("delivery_time", ["sobh", "zohr", "asr"])
             df = pd.read_csv("delivery_time.csv")
-        zohr_capacity = df.iloc[:, 1:].sum()[1]
-        asr_capacity = df.iloc[:, 1:].sum()[2]
+        zohr_capacity = df.iloc[:, 1:].sum()[0]
+        asr_capacity = df.iloc[:, 1:].sum()[1]
         print("#.sobh")
         if zohr_capacity < 3:
             print("$.zhor")
@@ -267,19 +228,19 @@ class Address:
 
         choice = input("Enter your choice here: ")
         if choice == "#":
-            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [1], 'zohr': [0], 'asr': [0]})
+            new_row = pd.DataFrame({'sobh': [1], 'zohr': [0], 'asr': [0]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
         elif choice == "$":
-            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [0], 'zohr': [1], 'asr': [0]})
+            new_row = pd.DataFrame({'sobh': [0], 'zohr': [1], 'asr': [0]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
         elif choice == "*":
-            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [0], 'zohr': [0], 'asr': [1]})
+            new_row = pd.DataFrame({'sobh': [0], 'zohr': [0], 'asr': [1]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
 
-address = Address(123)
+address = Address()
 
 
 """
