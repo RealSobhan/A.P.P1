@@ -179,7 +179,7 @@ class Pay:
 
 
 class Address:
-    def __init__(self):
+    def __init__(self, tracking_code):
         self.state = self.get_state()
         self.city = self.get_city(self.state)
         self.overall_address = self.get_address()
@@ -187,7 +187,8 @@ class Address:
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
         self.delivery_type = self.delivery_type(self.state)
-        self.delivery_time = self.delivery_time()
+        self.delivery_time = self.delivery_time(tracking_code)
+
 
 
     def get_state(self):
@@ -249,28 +250,36 @@ class Address:
         else:
             delivery_type = "post"
         return delivery_type
-    def delivery_time(self):
+    def delivery_time(self, tracking_code):
         print("Available delivery times:")
-        create_csv("delivery_time", ["tracking_code", "sobh", "zohr", "asr"])
-        df = pd.read_csv("delivery_time.csv")
-        flag = True
-        sobh_capacity = df.iloc[:, 1:].sum()[0]
+        try:
+            df = pd.read_csv("delivery_time.csv")
+        except ValueError:
+            create_csv("delivery_time", ["tracking_code", "sobh", "zohr", "asr"])
+            df = pd.read_csv("delivery_time.csv")
         zohr_capacity = df.iloc[:, 1:].sum()[1]
         asr_capacity = df.iloc[:, 1:].sum()[2]
-        print("1.sobh")
-        if zohr_capacity <= 3:
-            flag = False
-            print("2.Zhor")
-        if asr_capacity <= 3:
-            if flag:
-                print("2.asr")
-            else:
-                print("3.asr")
+        print("#.sobh")
+        if zohr_capacity < 3:
+            print("$.zhor")
+        if asr_capacity < 3:
+            print("*.asr")
 
-        choice = input("Enter your choice here: ")  # Validate phone number
+        choice = input("Enter your choice here: ")
+        if choice == "#":
+            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [1], 'zohr': [0], 'asr': [0]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
+        elif choice == "$":
+            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [0], 'zohr': [1], 'asr': [0]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
+        elif choice == "*":
+            new_row = pd.DataFrame({'tracking_code': [tracking_code], 'sobh': [0], 'zohr': [0], 'asr': [1]})
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_csv('delivery_time.csv', index=False)
 
-
-address = Address()
+address = Address(123)
 
 
 """
