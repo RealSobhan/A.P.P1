@@ -23,7 +23,7 @@ class Product:
         self.material = material
         self.stock = stock
         #self.warehouse = warehouse
-
+"""
     def add_stock(self, amount):
         self.stock += amount
     
@@ -49,22 +49,22 @@ class Product:
           
     def __str__(self):
         return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
-"""    
+"""
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
         self.location = location
         self.capacity = capacity
         self.products = {}
-"""
-bayad ye object az product be in def paas dade beshe 
-    def add_item(self, product_obj):
+
+#bayad ye object az product be in def paas dade beshe
+    def add_item(self, product_obj, quantity):
         if len(self.products) < self.capacity:
-            if item_code in self.products:
+            if product_obj.code in self.products:
                 self.products[product_obj.code]['stock'] += quantity
             else:
                 self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
-                'color': product.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
+                'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
 """
@@ -77,7 +77,7 @@ bayad ye object az product be in def paas dade beshe
                 self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
         else:
             print("Warehouse is at full capacity.")
-            
+"""
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
@@ -133,9 +133,9 @@ bayad ye object az product be in def paas dade beshe
 
 class Cart:
 
- pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
+#pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
-"""
+
 
 def create_csv(csv_name, lst_header):
     with open(f'{csv_name}.csv', mode='w', newline='') as file:
