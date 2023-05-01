@@ -7,7 +7,8 @@ import pandas as pd
 
 
 
-"""class Inventory:
+"""
+class Inventory:
 
 class Customer:
 
@@ -67,7 +68,7 @@ class Warehouse:
                 'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
-"""
+    """
     #ye def update gheymat bayad neveshte beshe
     def add_item(self, item_code, item_name, price, color, size, material, quantity):
         if len(self.products) < self.capacity:
@@ -77,7 +78,7 @@ class Warehouse:
                 self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
         else:
             print("Warehouse is at full capacity.")
-"""
+    """
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
@@ -131,7 +132,7 @@ class Warehouse:
         return f"Warehouse at {self.location} - {len(self.products)} products"
 
 
-class Cart:
+#class Cart:
 
 #pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
@@ -330,7 +331,7 @@ class Address:
         print("Available delivery times:")
         try:
             df = pd.read_csv("delivery_time.csv")
-        except FileNotFoundError:
+        except:
             create_csv("delivery_time", ["sobh", "zohr", "asr"])
             df = pd.read_csv("delivery_time.csv")
         zohr_capacity = df.iloc[:, 1:].sum()[0]
@@ -355,10 +356,18 @@ class Address:
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
 
-#address = Address()
+address = Address()
 
 
-"""
+
 class Factor:
-    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
-"""
+    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address):
+        self.item_name_list = list(cart.keys())
+        self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
+        self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
+        self.delivery_time = delivery_time
+        self.tracking_code = tracking_code
+        self.delivery_type = delivery_type
+        self.cfirst_name = cfirst_name
+        self.clast_name = clast_name
+        self.customer_address = customer_address
