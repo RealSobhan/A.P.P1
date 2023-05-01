@@ -2,12 +2,15 @@ from random import uniform
 #class Inventory:
 
 class customer :
-    def __init__(self) :
+    def __init__(self, fname, lname, email) :
         self.shopping_cart = Cart()
+        self.fname = fname
+        self.lname = lname
+        self.email = email        
         self.got_discount = False
     
     def get_discount(self) :
-        discount = uniform(0,0.5)
+        discount = uniform(-0.1,0.5)
         first_price = self.shopping_cart.total_cost()
         second_price = first_price * (1 - discount)
         self.got_discount = True
@@ -29,7 +32,7 @@ class customer :
 
 
 # ajnas dakhele cart tu ye dictionary rikhte mishan ke key haye dictionary esme jens va value haye dictionary tuple hastan
-# tuple[0] = tedad , tuple[1] = gheymate oon tedad jens
+# tuple[0] = tedad , tuple[1] = gheymate vahede oon jens, tuple[2] = gheymate oon tedad jens
 class Cart:
     
     def __init__(self) :
@@ -37,7 +40,7 @@ class Cart:
 
     
     def add_to_cart(self, item, number) : 
-        self.my_cart[str(item)] = (number, float(number * item.price))
+        self.my_cart[str(item)] = (number, item.price, float(number * item.price))
         
 
     def remove_from_cart(self, item, number) : 
@@ -65,10 +68,18 @@ class Cart:
         else :
             items_value = 0
             for i in self.my_cart.values() :
-                items_value += i[1]
+                items_value += i[2]
 
             return items_value
         
+    def total_quantity(self) :
+        if len(self.my_cart) == 0 :
+            return 0
+        else :
+            items_quantity = 0
+            for i in self.my_cart.values() :
+                items_quantity += i[0]
+            return items_quantity
         
         
 
