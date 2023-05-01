@@ -7,7 +7,8 @@ import pandas as pd
 
 
 
-"""class Inventory:
+"""
+class Inventory:
 
 class Customer:
 
@@ -67,17 +68,18 @@ class Warehouse:
                 'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
-"""
-    #ye def update gheymat bayad neveshte beshe
-    def add_item(self, item_code, item_name, price, color, size, material, quantity):
-        if len(self.products) < self.capacity:
-            if item_code in self.inventory:
-                self.inventory[item_code]['stock'] += quantity
+
+    """
+        #ye def update gheymat bayad neveshte beshe
+        def add_item(self, item_code, item_name, price, color, size, material, quantity):
+            if len(self.products) < self.capacity:
+                if item_code in self.inventory:
+                    self.inventory[item_code]['stock'] += quantity
+                else:
+                    self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
             else:
-                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
-        else:
-            print("Warehouse is at full capacity.")
-"""
+                print("Warehouse is at full capacity.")
+    """
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
@@ -131,7 +133,7 @@ class Warehouse:
         return f"Warehouse at {self.location} - {len(self.products)} products"
 
 
-class Cart:
+#class Cart:
 
 #pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
@@ -167,9 +169,10 @@ class Pay:
         self.card_number = self.get_card_number()
         self.cvv2 = self.get_cvv2()
         self.expire_date = self.get_expire_date()
-        self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
+        self.tracking_code = random_number_with_n_digits(11)
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.transaction_info(c_first_name, c_last_name)
+
     def get_card_number(self): #password chon hichi nadasht felan naneveshtamesh
         count = 0
         while count <= 2 and self.confirm_card_number:
@@ -246,7 +249,7 @@ class Pay:
         if self.confirm_card_number is True and self.confirm_cvv2 is True and self.confirm_expire_date is True:
             with open('notes.txt', 'a') as f:
                 f.write(f'\nTransaction Status: Successful')
-
+            return True
 
 
 
@@ -264,7 +267,8 @@ class Address:
         self.postal_code = self.get_postal_code()
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
-        self.delivery_type = self.delivery_type(self.state)
+        self.delivery_type = self.delivery_type(self.state)[0]
+        self.delivery_price= self.delivery_type(self.state)[1]
         self.delivery_time = self.delivery_time()
 
     def get_state(self):
@@ -323,9 +327,11 @@ class Address:
     def delivery_type(self, state):
         if state == "Tehran":
             delivery_type = "peyk"
+            delivery_price = 30
         else:
             delivery_type = "post"
-        return delivery_type
+            delivery_price = 20
+        return delivery_type, delivery_price
     def delivery_time(self):
         print("Available delivery times:")
         try:
@@ -337,7 +343,7 @@ class Address:
         asr_capacity = df.iloc[:, 1:].sum()[1]
         print("#.sobh")
         if zohr_capacity < 3:
-            print("$.zhor")
+            print("$.zohr")
         if asr_capacity < 3:
             print("*.asr")
 
@@ -346,15 +352,17 @@ class Address:
             new_row = pd.DataFrame({'sobh': [1], 'zohr': [0], 'asr': [0]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
+            return "sobh"
         elif choice == "$":
             new_row = pd.DataFrame({'sobh': [0], 'zohr': [1], 'asr': [0]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
+            return "zohr"
         elif choice == "*":
             new_row = pd.DataFrame({'sobh': [0], 'zohr': [0], 'asr': [1]})
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
-
+            return "asr"
 #address = Address()
 
 
