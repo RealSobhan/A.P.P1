@@ -366,3 +366,10 @@ class Accounting:
         self.tax = total_cost_products * 0.09
         self.tracking_code = tracking_code
         self.delivery_price = delivery_price
+        
+        def add_order():
+        try:
+            df = pd.read_csv("accounting.csv")
+        except FileNotFoundError:
+            create_csv("accounting", ["tracking_code", "count_products", "products_price", "delivery_price", "tax" ])
+            df = pd.read_csv("accounting.csv")
