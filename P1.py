@@ -393,3 +393,11 @@ class Factor:
         self.cfirst_name = cfirst_name
         self.clast_name = clast_name
         self.customer_address = customer_address
+        
+    def create_factor(self):
+        items = []
+        for i in range(len(self.item_name_list)):
+            item_name = self.item_name_list[i]
+            item_price = self.self_item_price[i]
+            item_quantity = self.self_item_quantity[i]
+            items.append({"Item Name": item_name, "Price": item_price, "Quantity": item_quantity})
