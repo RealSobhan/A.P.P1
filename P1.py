@@ -381,3 +381,9 @@ class Accounting:
         return True
     
 accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
+
+class Factor:
+    def __init__(self, cart):
+        self.item_name_list = list(cart.keys())
+        self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
+        self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
