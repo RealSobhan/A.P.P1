@@ -383,7 +383,13 @@ class Accounting:
 accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
 
 class Factor:
-    def __init__(self, cart):
+    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address):
         self.item_name_list = list(cart.keys())
         self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
         self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
+        self.delivery_time = delivery_time
+        self.tracking_code = tracking_code
+        self.delivery_type = delivery_type
+        self.cfirst_name = cfirst_name
+        self.clast_name = clast_name
+        self.customer_address = customer_address
