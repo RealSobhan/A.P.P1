@@ -367,9 +367,14 @@ class Accounting:
         self.tracking_code = tracking_code
         self.delivery_price = delivery_price
         
-        def add_order():
+    def add_order(self):
         try:
             df = pd.read_csv("accounting.csv")
         except FileNotFoundError:
             create_csv("accounting", ["tracking_code", "count_products", "products_price", "delivery_price", "tax" ])
             df = pd.read_csv("accounting.csv")
+            
+        new_row = pd.DataFrame({'tracking_code': [self.tracking_code], 'count_products': [self.count_items],
+                                'products_price': [self.total_cost_products], 'delivery_price'= [self.delivery_price], 'tax' = [self.tax] })
+        df = pd.concat([df, new_row], ignore_index=True)
+        df.to_csv('accounting.csv', index=False)
