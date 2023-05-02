@@ -359,15 +359,9 @@ class Address:
 address = Address()
 
 
+class Accounting:
+    def __init__(self, cart):
+        self.count_items = cart.total_quantity()
+        self.total_cost_products = cart.total_cost()
+        self.tax = total_cost_products * 0.09
 
-class Factor:
-    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address):
-        self.item_name_list = list(cart.keys())
-        self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
-        self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
-        self.delivery_time = delivery_time
-        self.tracking_code = tracking_code
-        self.delivery_type = delivery_type
-        self.cfirst_name = cfirst_name
-        self.clast_name = clast_name
-        self.customer_address = customer_address
