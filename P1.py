@@ -378,3 +378,4 @@ class Accounting:
                                 'products_price': [self.total_cost_products], 'delivery_price'= [self.delivery_price], 'tax' = [self.tax] })
         df = pd.concat([df, new_row], ignore_index=True)
         df.to_csv('accounting.csv', index=False)
+        return True
