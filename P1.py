@@ -360,8 +360,8 @@ address = Address()
 
 
 class Accounting:
-    def __init__(self, cart):
+    def __init__(self, cart, tracking_code):
         self.count_items = cart.total_quantity()
         self.total_cost_products = cart.total_cost()
         self.tax = total_cost_products * 0.09
-
+        self.tracking_code = tracking_code
