@@ -379,3 +379,5 @@ class Accounting:
         df = pd.concat([df, new_row], ignore_index=True)
         df.to_csv('accounting.csv', index=False)
         return True
+    
+accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
