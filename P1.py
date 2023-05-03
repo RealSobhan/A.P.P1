@@ -403,3 +403,20 @@ class Factor:
             items.append({"Item Name": item_name, "Price": item_price, "Quantity": item_quantity})
             
         total_cost = sum(item["Price"] * item["Quantity"] for item in items)
+        
+        invoice = """
+-----------------------------------------
+            SALES FACTOR
+-----------------------------------------
+Tracking Code: {}
+Delivery Time: {}
+Delivery Type: {}
+Customer First Name: {}
+Customer Last Name: {}
+Customer Address: {}
+
+|{:<20} |{:<10} |{:<10} |
+|---------------------|-----------|-----------|
+{}
+------------------------------------------
+Thank you for your purchase!        
