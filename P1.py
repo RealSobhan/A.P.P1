@@ -58,14 +58,9 @@ class Warehouse:
         self.products = pd.read_csv(f"{self.name}warehouse.csv")
     
     def search_products(self, material=None, color=None, size=None, max_price=None):
-        results = []
-        for product in self.products:
-            if (not material or product.material == material) and \
-               (not color or product.color == color) and \
-               (not size or product.size == size) and \
-               (not max_price or product.price <= max_price):
-                results.append(product)
-        return results
+        filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
+                                        & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
+        return filtered_df
     
     def get_products_by_color(self, color):
         color_products = []
