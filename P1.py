@@ -426,3 +426,6 @@ Thank you for your purchase!
         print(invoice)
         with open('Factor.txt', 'w') as f:
             f.write(invoice)
+            
+factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, customer.fname, customer.lname, address.overall_address)
+factor.create_factor()
