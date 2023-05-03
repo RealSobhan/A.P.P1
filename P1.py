@@ -77,15 +77,6 @@ class Warehouse:
     def get_products_by_price_range(self, min_price, max_price):
         filtered_df_price = self.products.loc[(self.products['price'] >= min_price) & (self.products['price'] <= max_price)]
         return filtered_df_price
-    
-    def __str__(self):
-        return f"Warehouse at {self.location} - {len(self.products)} products"
-
-
-#class Cart:
-
-#pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
-
 
 
 def create_csv(csv_name, lst_header):
