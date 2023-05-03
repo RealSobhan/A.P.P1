@@ -163,8 +163,8 @@ while True :
     if choice == 2 :
         print("1.Show available products")
         print("2.Add product to my cart")
-        print("3.Remove product from my cart")
-        print("4.Show my cart") # az in gozine mishavad pardakht kard
+        print("3.Show my cart") # az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
+        
         
         
     if choice == 3 :
