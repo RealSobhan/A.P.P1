@@ -71,11 +71,8 @@ class Warehouse:
         return filtered_df_material
     
     def get_products_by_size(self, size):
-        size_products = []
-        for product in self.products:
-            if product.size == size:
-                size_products.append(product)
-        return size_products
+        filtered_df_size = self.products.loc[(self.products['size'] == size)]
+        return filtered_df_size
     
     def get_products_by_price_range(self, min_price, max_price):
         price_range_products = []
