@@ -15,15 +15,14 @@ class Customer:
 class Admin:
 """
 class Product:
-    def __init__(self, code, name, price, color, size, material, stock, warehouse):
+    def __init__(self, code, name, price, color, size, material):
         self.code = code
         self.name = name
         self.price = price
         self.color = color
         self.size = size
         self.material = material
-        self.stock = stock
-        #self.warehouse = warehouse
+
 """
     def add_stock(self, amount):
         self.stock += amount
