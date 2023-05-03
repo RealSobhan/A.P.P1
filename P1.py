@@ -63,11 +63,8 @@ class Warehouse:
         return filtered_df
     
     def get_products_by_color(self, color):
-        color_products = []
-        for product in self.products:
-            if product.color == color:
-                color_products.append(product)
-        return color_products
+        filtered_df_color = self.products.loc[(self.products['color'] == color)]
+        return filtered_df_color
     
     def get_products_by_material(self, material):
         material_products = []
