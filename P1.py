@@ -4,16 +4,6 @@ from datetime import datetime
 import csv
 import pandas as pd
 
-
-
-
-"""
-class Inventory:
-
-class Customer:
-
-class Admin:
-"""
 class Product:
     def __init__(self, code, name, price, color, size, material):
         self.code = code
@@ -23,33 +13,6 @@ class Product:
         self.size = size
         self.material = material
 
-"""
-    def add_stock(self, amount):
-        self.stock += amount
-    
-    def remove_stock(self, amount):
-        if self.stock - amount < 0:
-            raise ValueError("Not enough stock")
-        self.stock -= amount
-
-    def update_price(self, new_price):
-        self.price = new_price
-        
-    def to_dict(self):
-        return {
-            "code": self.code,
-            "name": self.name,
-            "price": self.price,
-            "color": self.color,
-            "size": self.size,
-            "material": self.material,
-            "stock": self.stock,
-            "warehouse": self.warehouse
-        }
-          
-    def __str__(self):
-        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
-"""
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
