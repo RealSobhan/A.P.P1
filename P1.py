@@ -112,7 +112,7 @@ class Cart:
 #class Factor:
 #    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
 
-warehouse = Warehouse("P1","Iran",10)
+warehouse = Warehouse("P1","Iran")
 
 while True :
     print("welcome to our online shop")
@@ -124,8 +124,40 @@ while True :
             print("1.Add item to inventory")
             print("2.remove item from inventory")
             print("3.Update price")
+            print("4.Update warehouse quantity using csv file")
+            print("5.Update warehouse quantity manually")
             choice = input("Enter your choice here : ")
             if choice == 1 :
-                
+                code = int(input("Enter the product code : "))
+                name = input("Enter the product name : ")
+                price = float(input("Enter the product price : "))
+                color = input("Enter the product color : ")
+                size = input("Enter the product size : ")
+                material = input("Enter the product material : ")
+                quantity = int(input("Enter product quantity : "))
                 product_obj = Product(code, name, price, color, size, material)
                 warehouse.add_item(product_obj, quantity)
+                print("Product added seccessfully.")
+
+            elif choice == 2 :
+                code = int(input("Enter the product code : "))
+                quantity = int(input("Enter product quantity : "))
+                warehouse.remove_item(code, quantity)
+
+            elif choice == 3 :
+                code = int(input("Enter the product code : "))
+                new_price = float(input("Enter product new price : "))
+                warehouse.update_price(code, new_price)
+
+            elif choice == 4 :
+                
+
+            elif choice == 5 :
+                code = int(input("Enter the product code : "))
+                quantity = float(input("Enter product new quantity : "))
+                warehouse.update_price(code, quantity)
+            
+
+    
+    if choice == 2 :
+
