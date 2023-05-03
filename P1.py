@@ -43,11 +43,13 @@ class Warehouse:
         self.products = pd.read_csv(f"{self.name}warehouse.csv")
         
     def remove_item(self, item_code, quantity):
-        if item_code not in self.products:
+        if item_code not in self.products["code"].tolist():
             return False
-        if self.products[item_code]['stock'] < quantity:
+        if self.products.loc[self.products["code"] == item_code]["stock"].values[0] <= quantity:
             return False
-        self.products[item_code]['stock'] -= quantity
+        self.products.loc[self.products["code"] == item_code, "stock"] -= quantity
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
         return True
     
     def update_price(self, item_code, new_price):
