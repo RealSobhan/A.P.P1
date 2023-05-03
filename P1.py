@@ -12,6 +12,8 @@ class Product:
         self.color = color
         self.size = size
         self.material = material
+        
+# az vizhegihaye(attributes) product kam konim
 
 class Warehouse:
     def __init__(self, name, location, capacity):
