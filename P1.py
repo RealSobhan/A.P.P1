@@ -1,4 +1,5 @@
 from random import uniform
+import pandas as pd
 #class Inventory:
 
 class customer :
@@ -35,16 +36,17 @@ class customer :
 # tuple[0] = tedad , tuple[1] = gheymate vahede oon jens, tuple[2] = gheymate oon tedad jens
 class Cart:
     
-    def __init__(self) :
+    def __init__(self, warehouse) :
         self.my_cart = {}
-        self.warehouse_items = pd.read_csv(f"{warehouse.name}warehouse.csv")
+        self.warehouse = warehouse
+        self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
     
     def add_to_cart(self, item, number) : 
         if self.warehouse_items.loc[self.warehouse_items["name"] == item]["stock"].values[0] >= number :
             self.my_cart[str(item)] = (number, item.price, float(number * item.price))
             self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] -= number
-            self.warehouse_items.to_csv(f"{warehouse.name}warehouse.csv", index=False)
-            self.warehouse_items = pd.read_csv(f"{warehouse.name}warehouse.csv")
+            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
             return True
         else :
             return False
@@ -56,11 +58,14 @@ class Cart:
 
         elif number == first_number :
             self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
-            
+            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
             del self.my_cart[str(item)]
 
         else : 
             self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
+            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
             remaining_nmber = first_number - number
             self.my_cart[str(item)] = (remaining_nmber, remaining_nmber * item.price)
             print(f"you removed {number} number(s) of this item and now there is {remaining_nmber} number(s) remeining in your cart")
@@ -69,6 +74,11 @@ class Cart:
         print(self.my_cart)
 
     def empty_my_cart(self) : 
+        for i in self.my_cart :
+            self.warehouse_items.loc[self.warehouse_items["name"] == i, "stock"] += i[0]
+            
+        self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+        self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
         self.my_cart.clear()
 
     def total_cost(self) : 
