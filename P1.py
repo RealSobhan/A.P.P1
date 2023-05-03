@@ -422,3 +422,7 @@ Customer Address: {}
 Thank you for your purchase!        
         """.format(self.tracking_code, self.delivery_time, self.delivery_type, self.cfirst_name, self.clast_name ,self.customer_address, total_cost, "Item Name", "Price", "Quantity",
                 "\n".join([f"|{item['Item Name']:<20} |${item['Price']:>9.2f} |{item['Quantity']:>10} |${item['Price']*item['Quantity']:>9.2f}|" for item in items]))
+
+        print(invoice)
+        with open('Factor.txt', 'w') as f:
+            f.write(invoice)
