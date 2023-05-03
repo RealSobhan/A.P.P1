@@ -27,7 +27,8 @@ class customer :
 
 
 
-#class Admin:
+#class Admin :
+
 
 #class Product:
 
@@ -76,7 +77,7 @@ class Cart:
     def empty_my_cart(self) : 
         for i in self.my_cart :
             self.warehouse_items.loc[self.warehouse_items["name"] == i, "stock"] += i[0]
-            
+
         self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
         self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
         self.my_cart.clear()
@@ -110,3 +111,21 @@ class Cart:
 
 #class Factor:
 #    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
+
+warehouse = Warehouse("P1","Iran",10)
+
+while True :
+    print("welcome to our online shop")
+    print("1.Admin")
+    print("2.Customer")
+    print("3.Exit")
+    choice = input("Enter your choice here : ")
+    if choice == 1 :
+            print("1.Add item to inventory")
+            print("2.remove item from inventory")
+            print("3.Update price")
+            choice = input("Enter your choice here : ")
+            if choice == 1 :
+                
+                product_obj = Product(code, name, price, color, size, material)
+                warehouse.add_item(product_obj, quantity)
