@@ -37,11 +37,17 @@ class Cart:
     
     def __init__(self) :
         self.my_cart = {}
-
+        self.warehouse_items = pd.read_csv(f"{warehouse.name}warehouse.csv")
     
     def add_to_cart(self, item, number) : 
-        self.my_cart[str(item)] = (number, item.price, float(number * item.price))
-        
+        if self.warehouse_items.loc[self.warehouse_items["name"] == item]["stock"].values[0] >= number :
+            self.my_cart[str(item)] = (number, item.price, float(number * item.price))
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] -= number
+            self.warehouse_items.to_csv(f"{warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{warehouse.name}warehouse.csv")
+            return True
+        else :
+            return False
 
     def remove_from_cart(self, item, number) : 
         first_number = self.my_cart[str(item)][0]
@@ -49,9 +55,12 @@ class Cart:
             print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
 
         elif number == first_number :
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
+            
             del self.my_cart[str(item)]
 
         else : 
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
             remaining_nmber = first_number - number
             self.my_cart[str(item)] = (remaining_nmber, remaining_nmber * item.price)
             print(f"you removed {number} number(s) of this item and now there is {remaining_nmber} number(s) remeining in your cart")
