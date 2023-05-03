@@ -75,11 +75,8 @@ class Warehouse:
         return filtered_df_size
     
     def get_products_by_price_range(self, min_price, max_price):
-        price_range_products = []
-        for product in self.products:
-            if min_price <= product.price <= max_price:
-                price_range_products.append(product)
-        return price_range_products
+        filtered_df_price = self.products.loc[(self.products['price'] >= min_price) & (self.products['price'] <= max_price)]
+        return filtered_df_price
     
     def __str__(self):
         return f"Warehouse at {self.location} - {len(self.products)} products"
