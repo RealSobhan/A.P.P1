@@ -20,7 +20,11 @@ class Warehouse:
         self.name = name
         self.location = location
         self.capacity = capacity
-        self.products = {}
+        try:
+            self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        except FileNotFoundError:
+            create_csv(f"{self.name}warehouse", ["code", "name", "color", "size", "material", "stock", "price"])
+            self.products = pd.read_csv(f"{self.name}warehouse.csv")
 
 #bayad ye object az product be in def paas dade beshe
     def add_item(self, product_obj, quantity):
