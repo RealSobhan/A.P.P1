@@ -26,27 +26,22 @@ class Warehouse:
             create_csv(f"{self.name}warehouse", ["code", "name", "color", "size", "material", "stock", "price"])
             self.products = pd.read_csv(f"{self.name}warehouse.csv")
 
-#bayad ye object az product be in def paas dade beshe
+###     bayad ye object az product be in def paas dade beshe
+
     def add_item(self, product_obj, quantity):
-        if len(self.products) < self.capacity:
-            if product_obj.code in self.products:
-                self.products[product_obj.code]['stock'] += quantity
+        if len((self.products).index) <= self.capacity:
+            if product_obj.code in self.products["code"].tolist():
+                self.products.loc[self.products["code"] == product_obj.code, "stock"] += quantity
             else:
-                self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
-                'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
+                new_row = pd.DataFrame({'code': [product_obj.code], 'name': [product_obj.name], 'color': [product_obj.color],"size": [product_obj.size],
+                                        "material": [product_obj.material], "stock": quantity, "price": [product_obj.price]})
+                self.products = pd.concat([self.products, new_row], ignore_index=True)
+                self.products.to_csv(f'{self.name}warehouse.csv', index=False)
         else:
             print("Warehouse is at full capacity.")
-    """
-    #ye def update gheymat bayad neveshte beshe
-    def add_item(self, item_code, item_name, price, color, size, material, quantity):
-        if len(self.products) < self.capacity:
-            if item_code in self.inventory:
-                self.inventory[item_code]['stock'] += quantity
-            else:
-                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
-        else:
-            print("Warehouse is at full capacity.")
-    """
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
