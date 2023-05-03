@@ -53,7 +53,9 @@ class Warehouse:
         return True
     
     def update_price(self, item_code, new_price):
-        self.products[item_code]["price"] = new_price
+        self.products.loc[self.products["code"] == item_code, "price"] = new_price
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
     
     def search_products(self, material=None, color=None, size=None, max_price=None):
         results = []
