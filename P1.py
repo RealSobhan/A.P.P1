@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 import csv
 import pandas as pd
+
 class Product:
     def __init__(self, code, name, price, color, size, material):
         self.code = code
@@ -33,25 +34,44 @@ class Warehouse:
             new_row = pd.DataFrame({'code': [product_obj.code], 'name': [product_obj.name], 'color': [product_obj.color],"size": [product_obj.size],
                                     "material": [product_obj.material], "stock": quantity, "price": [product_obj.price]})
             self.products = pd.concat([self.products, new_row], ignore_index=True)
-            self.products.to_csv(f'{self.name}warehouse.csv', index=False)
 
         self.products.to_csv(f'{self.name}warehouse.csv', index=False)
         self.products = pd.read_csv(f"{self.name}warehouse.csv")
         
     def remove_item(self, item_code, quantity):
         if item_code not in self.products["code"].tolist():
-            return False
+            return "Item not found"  # error message
         if self.products.loc[self.products["code"] == item_code]["stock"].values[0] <= quantity:
-            return False
+            return "Insufficient items"  # error message
         self.products.loc[self.products["code"] == item_code, "stock"] -= quantity
         self.products.to_csv(f'{self.name}warehouse.csv', index=False)
         self.products = pd.read_csv(f"{self.name}warehouse.csv")
-        return True
+        return "Item removed succesfully"
     
     def update_price(self, item_code, new_price):
         self.products.loc[self.products["code"] == item_code, "price"] = new_price
         self.products.to_csv(f'{self.name}warehouse.csv', index=False)
         self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        return "price updated succesfully"
+    
+    def update_quantity(self, item_code, quantity):
+        self.products.loc[self.products["code"] == item_code, "quantity"] = quantity
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        return "quantity updated succesfully"
+    
+    def update_quantiy_csv(self, input_csv_address):
+        input_csv = pd.read_csv(f"{input_csv_address}")
+        merged_df = pd.merge(self.products, input_csv[['code', 'quantity']], on = 'code', how = "left")
+        merged_df['quantity'] = merged_df['quantity'].fillna(self.products['quantity'])
+        self.products['quantity'] = merged_df['quantity']
+        self.products.to_csv(f"{self.name}warehouse.csv", index=False)
+        return "quantity updated succesfully"
+    
+    def file_output(self):
+        output = self.products.copy()
+        output["warehouse_code"] = 1
+        output.to_csv('output.csv', index=False)
     
     def search_products(self, material=None, color=None, size=None, max_price=None):
         filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
@@ -295,8 +315,8 @@ class Address:
         self.postal_code = self.get_postal_code()
         self.receiver = self.get_receiver()
         self.phone_number = self.get_phone_number()
-        self.delivery_type = self.delivery_type(self.state)[0]
-        self.delivery_price= self.delivery_type(self.state)[1]
+        self.delivery_type = (self.get_delivery_type(self.state))[0]
+        self.delivery_price= (self.get_delivery_type(self.state))[1]
         self.delivery_time = self.delivery_time()
 
     def get_state(self):
@@ -352,14 +372,14 @@ class Address:
                 print("Error: Enter Valid phone number! phone number must be 10 digits")
                 continue
             return phone_number
-    def delivery_type(self, state):
+    def get_delivery_type(self, state):
         if state == "Tehran":
             delivery_type = "peyk"
             delivery_price = 20
         else:
             delivery_type = "post"
             delivery_price = 30
-        return delivery_type, delivery_price
+        return [delivery_type, delivery_price]
     def delivery_time(self):
         print("Available delivery times:")
         try:
@@ -391,9 +411,6 @@ class Address:
             df = pd.concat([df, new_row], ignore_index=True)
             df.to_csv('delivery_time.csv', index=False)
             return "asr"
-#address = Address()
-
-address = Address()
 
 
 class Accounting:
@@ -412,79 +429,18 @@ class Accounting:
             df = pd.read_csv("accounting.csv")
             
         new_row = pd.DataFrame({'tracking_code': [self.tracking_code], 'count_products': [self.count_items],
-                                'products_price': [self.total_cost_products], 'delivery_price'= [self.delivery_price], 'tax' = [self.tax] })
+                                'products_price': [self.total_cost_products], 'delivery_price': [self.delivery_price], 'tax': [self.tax] })
         df = pd.concat([df, new_row], ignore_index=True)
         df.to_csv('accounting.csv', index=False)
         return True
     
-accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
-
-
-
-
-warehouse = Warehouse("P1","Iran")
-
-while True :
-    print("welcome to our online shop")
-    print("1.Admin")
-    print("2.Customer")
-    print("3.Exit")
-    choice = int(input("Enter your choice here : "))
-    if choice == 1:
-        print('---------Admin panel---------')
-        print("1.Add item to inventory")
-        print("2.remove item from inventory")
-        print("3.Update price")
-        print("4.Update warehouse quantity using csv file")
-        print("5.Update warehouse quantity manually")
-        choice = int(input("Enter your choice here : "))
-        if choice == 1:
-            code = int(input("Enter the product code : "))
-            name = input("Enter the product name : ")
-            price = float(input("Enter the product price : "))
-            color = input("Enter the product color : ")
-            size = input("Enter the product size : ")
-            material = input("Enter the product material : ")
-            quantity = int(input("Enter product quantity : "))
-            product_obj = Product(code, name, price, color, size, material)
-            warehouse.add_item(product_obj, quantity)
-            print("Product added seccessfully.")
-
-        elif choice == 2:
-            code = int(input("Enter the product code : "))
-            quantity = int(input("Enter product quantity : "))
-            warehouse.remove_item(code, quantity)
-
-        elif choice == 3:
-            code = int(input("Enter the product code : "))
-            new_price = float(input("Enter product new price : "))
-            warehouse.update_price(code, new_price)
-
-        elif choice == 4:
-            
-
-        elif choice == 5:
-            code = int(input("Enter the product code : "))
-            quantity = float(input("Enter product new quantity : "))
-            warehouse.update_price(code, quantity)
-            
-
     
-    if choice == 2:
-        print("1.Show available products")
-        print("2.Add product to my cart")
-        print("3.Show my cart") # az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
-        
-        
-        
-    if choice == 3:
-        break
 
 class Factor:
     def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address):
-        self.item_name_list = list(cart.keys())
-        self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
-        self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
+        self.item_name_list = list(cart.my_cart.keys())
+        self.self_item_quantity = [list(cart.my_cart.values())[x][0] for x in range(len(list(cart.my_cart.values())))]
+        self.self_item_price = [list(cart.my_cart.values())[x][1] for x in range(len(list(cart.my_cart.values())))]
         self.delivery_time = delivery_time
         self.tracking_code = tracking_code
         self.delivery_type = delivery_type
@@ -520,10 +476,122 @@ Customer Address: {}
 Thank you for your purchase!        
         """.format(self.tracking_code, self.delivery_time, self.delivery_type, self.cfirst_name, self.clast_name ,self.customer_address, total_cost, "Item Name", "Price", "Quantity",
                 "\n".join([f"|{item['Item Name']:<20} |${item['Price']:>9.2f} |{item['Quantity']:>10} |${item['Price']*item['Quantity']:>9.2f}|" for item in items]))
-
-        print(invoice)
+        print("Purchase was successfull!")
         with open('Factor.txt', 'w') as f:
             f.write(invoice)
 
-factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, customer.fname, customer.lname, address.overall_address)
-factor.create_factor()
+
+
+
+
+
+warehouse_main = Warehouse("P1","Iran")
+def admin_scenario():
+    while True:
+        print('---------Admin panel---------')
+        print("1.Add item to inventory")
+        print("2.remove item from inventory")
+        print("3.Update price")
+        print("4.Update warehouse quantity using csv file")
+        print("5.Update warehouse quantity manually")
+        print("6.Exit")
+        choice = int(input("Enter your choice here : "))
+        if choice == 1:     ### in okeye
+
+            code = int(input("Enter the product code : "))
+            name = input("Enter the product name : ")
+            price = float(input("Enter the product price : "))
+            color = input("Enter the product color : ")
+            size = input("Enter the product size : ")
+            material = input("Enter the product material : ")
+            quantity = int(input("Enter product quantity : "))
+            product_obj = Product(code, name, price, color, size, material)
+            warehouse_main.add_item(product_obj, quantity)
+            print("Product added successfully.")
+
+        elif choice == 2:   ### in okeye
+            code = int(input("Enter the product code : "))
+            quantity = int(input("Enter product quantity : "))
+            print(warehouse_main.remove_item(code, quantity))
+            
+        elif choice == 3:       ### in okeye
+            code = int(input("Enter the product code : "))
+            new_price = float(input("Enter product new price : "))
+            print(warehouse_main.update_price(code, new_price))
+
+        elif choice == 4:
+            csv_address  = input("Enter the csv address here:")
+            print(warehouse_main.update_quantiy_csv(csv_address))
+
+        elif choice == 5:
+            code = int(input("Enter the product code : "))
+            quantity = float(input("Enter product new quantity : "))
+            print(warehouse_main.update_quantity(code, quantity))
+            
+        elif choice == 6:
+            break
+
+        else:
+            print("Enter valid choice")
+            
+            
+
+
+
+def customer_scenario(cus_fname, cus_lname, warehouse):
+    cart = Cart(warehouse)
+    while True:
+        print('\n---------Customer panel---------')
+        print("1.Show available products")
+        print("2.Add product to my cart")
+        print("3.Show my cart") # az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
+        choice = int(input("Enter your choice here : "))
+        if choice == 1:
+            df = warehouse.products.set_index('code')
+
+            # print the data frame in the desired format
+            print("Code\tName\t\tMaterial\tcolor     \tSize\tQuantity\tPrice")
+            print("----------------------------------------------------------------------------------------")
+            for index, row in df.iterrows():
+                print(f"{index}\t{row['name']}\t {row['material']}\t\t {row['color']}     \t {row['size']}\t   {row['stock']}\t\t${row['price']}")
+        elif choice == 2:
+            code = int(input("Enter the product code : "))
+            quantity = int(input("Enter product quantity : "))
+            print(warehouse_main.remove_item(code, quantity))
+        elif choice == 3:
+            print("\n1.Remove item from the cart")
+            print("2.Confirm purchases")
+            choice = int(input("Enter your choice here : "))
+            if choice == 1:
+                code = int(input("Enter the product code : "))
+                quantity = int(input("Enter product quantity : "))
+                print(warehouse_main.remove_item(code, quantity))
+            elif choice == 2:
+                address = Address()
+                pay = Pay(cus_fname, cus_lname)
+                if pay.confirm_card_number == True and pay.confirm_cvv2 == True and pay.confirm_expire_date == True:
+                    factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, cus_fname, cus_lname, address.overall_address)
+                    factor.create_factor()
+                    accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
+                    accounting.add_order()
+                
+                
+        
+
+while True :
+    print("-------------Welcome to our online shop-------------")
+    print("1.Admin")
+    print("2.Customer")
+    print("3.Exit")
+    choice = int(input("Enter your choice here : "))
+    if choice == 1:
+        admin_scenario()
+        
+    if choice == 2:
+        fname = input("Enter your first name here : ")
+        lname = input("Enter your last name here : ")
+        customer_scenario(fname, lname, warehouse_main)
+        
+    if choice == 3:
+        break
+
