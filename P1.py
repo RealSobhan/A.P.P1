@@ -15,10 +15,9 @@ class Product:
 # az vizhegihaye(attributes) product kam konim
 
 class Warehouse:
-    def __init__(self, name, location, capacity):
+    def __init__(self, name, location):
         self.name = name
         self.location = location
-        self.capacity = capacity
         try:
             self.products = pd.read_csv(f"{self.name}warehouse.csv")
         except FileNotFoundError:
@@ -106,7 +105,6 @@ class customer :
 # ajnas dakhele cart tu ye dictionary rikhte mishan ke key haye dictionary esme jens va value haye dictionary tuple hastan
 # tuple[0] = tedad , tuple[1] = gheymate vahede oon jens, tuple[2] = gheymate oon tedad jens
 class Cart:
-    
     def __init__(self, warehouse):
         self.my_cart = {}
         self.warehouse = warehouse
@@ -424,7 +422,7 @@ while True :
     print("2.Customer")
     print("3.Exit")
     choice = int(input("Enter your choice here : "))
-    if choice == 1 :
+    if choice == 1:
         print('---------Admin panel---------')
         print("1.Add item to inventory")
         print("2.remove item from inventory")
@@ -432,7 +430,7 @@ while True :
         print("4.Update warehouse quantity using csv file")
         print("5.Update warehouse quantity manually")
         choice = int(input("Enter your choice here : "))
-        if choice == 1 :
+        if choice == 1:
             code = int(input("Enter the product code : "))
             name = input("Enter the product name : ")
             price = float(input("Enter the product price : "))
@@ -444,34 +442,34 @@ while True :
             warehouse.add_item(product_obj, quantity)
             print("Product added seccessfully.")
 
-        elif choice == 2 :
+        elif choice == 2:
             code = int(input("Enter the product code : "))
             quantity = int(input("Enter product quantity : "))
             warehouse.remove_item(code, quantity)
 
-        elif choice == 3 :
+        elif choice == 3:
             code = int(input("Enter the product code : "))
             new_price = float(input("Enter product new price : "))
             warehouse.update_price(code, new_price)
 
-        elif choice == 4 :
+        elif choice == 4:
             
 
-        elif choice == 5 :
+        elif choice == 5:
             code = int(input("Enter the product code : "))
             quantity = float(input("Enter product new quantity : "))
             warehouse.update_price(code, quantity)
             
 
     
-    if choice == 2 :
+    if choice == 2:
         print("1.Show available products")
         print("2.Add product to my cart")
         print("3.Show my cart") # az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
         
         
         
-    if choice == 3 :
+    if choice == 3:
         break
 
 class Factor:
