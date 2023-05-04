@@ -11,73 +11,70 @@ class Product:
         self.color = color
         self.size = size
         self.material = material
+        
+# az vizhegihaye(attributes) product kam konim
 
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
         self.location = location
         self.capacity = capacity
-        self.products = {}
+        try:
+            self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        except FileNotFoundError:
+            create_csv(f"{self.name}warehouse", ["code", "name", "color", "size", "material", "stock", "price"])
+            self.products = pd.read_csv(f"{self.name}warehouse.csv")
 
-#bayad ye object az product be in def paas dade beshe
+###     bayad ye object az product be in def paas dade beshe
+
     def add_item(self, product_obj, quantity):
-        if len(self.products) < self.capacity:
-            if product_obj.code in self.products:
-                self.products[product_obj.code]['stock'] += quantity
-            else:
-                self.products[product_obj.code] = {'item_name': product_obj.name, 'price': product_obj.price, 
-                'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
+        if product_obj.code in self.products["code"].tolist():
+            self.products.loc[self.products["code"] == product_obj.code, "stock"] += quantity
         else:
-            print("Warehouse is at full capacity.")
+            new_row = pd.DataFrame({'code': [product_obj.code], 'name': [product_obj.name], 'color': [product_obj.color],"size": [product_obj.size],
+                                    "material": [product_obj.material], "stock": quantity, "price": [product_obj.price]})
+            self.products = pd.concat([self.products, new_row], ignore_index=True)
+            self.products.to_csv(f'{self.name}warehouse.csv', index=False)
 
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
+        
     def remove_item(self, item_code, quantity):
-        if item_code not in self.products:
+        if item_code not in self.products["code"].tolist():
             return False
-        if self.products[item_code]['stock'] < quantity:
+        if self.products.loc[self.products["code"] == item_code]["stock"].values[0] <= quantity:
             return False
-        self.products[item_code]['stock'] -= quantity
+        self.products.loc[self.products["code"] == item_code, "stock"] -= quantity
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
         return True
     
     def update_price(self, item_code, new_price):
-        self.products[item_code]["price"] = new_price
+        self.products.loc[self.products["code"] == item_code, "price"] = new_price
+        self.products.to_csv(f'{self.name}warehouse.csv', index=False)
+        self.products = pd.read_csv(f"{self.name}warehouse.csv")
     
     def search_products(self, material=None, color=None, size=None, max_price=None):
-        results = []
-        for product in self.products:
-            if (not material or product.material == material) and \
-               (not color or product.color == color) and \
-               (not size or product.size == size) and \
-               (not max_price or product.price <= max_price):
-                results.append(product)
-        return results
+        filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
+                                        & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
+        return filtered_df
     
     def get_products_by_color(self, color):
-        color_products = []
-        for product in self.products:
-            if product.color == color:
-                color_products.append(product)
-        return color_products
+        filtered_df_color = self.products.loc[(self.products['color'] == color)]
+        return filtered_df_color
     
     def get_products_by_material(self, material):
-        material_products = []
-        for product in self.products:
-            if product.material == material:
-                material_products.append(product)
-        return material_products
+        filtered_df_material = self.products.loc[(self.products['material'] == material)]
+        return filtered_df_material
     
     def get_products_by_size(self, size):
-        size_products = []
-        for product in self.products:
-            if product.size == size:
-                size_products.append(product)
-        return size_products
+        filtered_df_size = self.products.loc[(self.products['size'] == size)]
+        return filtered_df_size
     
     def get_products_by_price_range(self, min_price, max_price):
-        price_range_products = []
-        for product in self.products:
-            if min_price <= product.price <= max_price:
-                price_range_products.append(product)
-        return price_range_products
+        filtered_df_price = self.products.loc[(self.products['price'] >= min_price) & (self.products['price'] <= max_price)]
+        return filtered_df_price
+
 
 """
 class customer :
@@ -110,12 +107,12 @@ class customer :
 # tuple[0] = tedad , tuple[1] = gheymate vahede oon jens, tuple[2] = gheymate oon tedad jens
 class Cart:
     
-    def __init__(self, warehouse) :
+    def __init__(self, warehouse):
         self.my_cart = {}
         self.warehouse = warehouse
         self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
     
-    def add_to_cart(self, item, number) : 
+    def add_to_cart(self, item, number): 
         if self.warehouse_items.loc[self.warehouse_items["name"] == item]["stock"].values[0] >= number :
             self.my_cart[str(item)] = (number, item.price, float(number * item.price))
             self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] -= number
@@ -124,7 +121,7 @@ class Cart:
             return True
         else :
             return False
-    def remove_from_cart(self, item, number) : 
+    def remove_from_cart(self, item, number): 
         first_number = self.my_cart[str(item)][0]
         if number > first_number :
             print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
@@ -172,6 +169,9 @@ class Cart:
             for i in self.my_cart.values() :
                 items_quantity += i[0]
             return items_quantity
+        
+
+
 #pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
 
