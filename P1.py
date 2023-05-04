@@ -1,55 +1,17 @@
-from random import randint
+from random import randint, uniform
 import re
 from datetime import datetime
 import csv
 import pandas as pd
-
-
-
-
-"""class Inventory:
-
-class Customer:
-
-class Admin:
-"""
 class Product:
-    def __init__(self, code, name, price, color, size, material, stock, warehouse):
+    def __init__(self, code, name, price, color, size, material):
         self.code = code
         self.name = name
         self.price = price
         self.color = color
         self.size = size
         self.material = material
-        self.stock = stock
-        #self.warehouse = warehouse
-"""
-    def add_stock(self, amount):
-        self.stock += amount
-    
-    def remove_stock(self, amount):
-        if self.stock - amount < 0:
-            raise ValueError("Not enough stock")
-        self.stock -= amount
 
-    def update_price(self, new_price):
-        self.price = new_price
-        
-    def to_dict(self):
-        return {
-            "code": self.code,
-            "name": self.name,
-            "price": self.price,
-            "color": self.color,
-            "size": self.size,
-            "material": self.material,
-            "stock": self.stock,
-            "warehouse": self.warehouse
-        }
-          
-    def __str__(self):
-        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
-"""
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
@@ -67,17 +29,7 @@ class Warehouse:
                 'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
-"""
-    #ye def update gheymat bayad neveshte beshe
-    def add_item(self, item_code, item_name, price, color, size, material, quantity):
-        if len(self.products) < self.capacity:
-            if item_code in self.inventory:
-                self.inventory[item_code]['stock'] += quantity
-            else:
-                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
-        else:
-            print("Warehouse is at full capacity.")
-"""
+
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
@@ -126,13 +78,8 @@ class Warehouse:
             if min_price <= product.price <= max_price:
                 price_range_products.append(product)
         return price_range_products
-    
-    def __str__(self):
-        return f"Warehouse at {self.location} - {len(self.products)} products"
-from random import uniform
-import pandas as pd
-#class Inventory:
 
+"""
 class customer :
     def __init__(self, fname, lname, email) :
         self.shopping_cart = Cart()
@@ -155,13 +102,8 @@ class customer :
             res = self.shopping_cart.total_cost()
         print(f"you should pay {res } for items in your cart")
         return res
+"""
 
-
-
-#class Admin :
-
-
-#class Product:
 
 
 # ajnas dakhele cart tu ye dictionary rikhte mishan ke key haye dictionary esme jens va value haye dictionary tuple hastan
@@ -182,7 +124,54 @@ class Cart:
             return True
         else :
             return False
+    def remove_from_cart(self, item, number) : 
+        first_number = self.my_cart[str(item)][0]
+        if number > first_number :
+            print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
 
+        elif number == first_number :
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
+            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
+            del self.my_cart[str(item)]
+
+        else : 
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
+            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
+            remaining_nmber = first_number - number
+            self.my_cart[str(item)] = (remaining_nmber, remaining_nmber * item.price)
+            print(f"you removed {number} number(s) of this item and now there is {remaining_nmber} number(s) remeining in your cart")
+
+    def show_my_cart(self) :
+        print(self.my_cart)
+
+    def empty_my_cart(self) : 
+        for i in self.my_cart :
+            self.warehouse_items.loc[self.warehouse_items["name"] == i, "stock"] += i[0]
+
+        self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+        self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
+        self.my_cart.clear()
+
+    def total_cost(self) : 
+        if len(self.my_cart) == 0 :
+            return 0
+        else :
+            items_value = 0
+            for i in self.my_cart.values() :
+                items_value += i[2]
+
+            return items_value
+        
+    def total_quantity(self) :
+        if len(self.my_cart) == 0 :
+            return 0
+        else :
+            items_quantity = 0
+            for i in self.my_cart.values() :
+                items_quantity += i[0]
+            return items_quantity
 #pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 
 
@@ -202,12 +191,6 @@ def validate_email(email):
         r"^[a-zA-Z0-9\.\_]+@((gmail)|(yahoo)|(outlook)|(hotmail)|(live)|([a-z]*\.*[a-z]+\.ac)|(chmail))\.((com)|(ir))$",
         email, re.IGNORECASE))
 
-def create_csv(csv_name, lst_header):
-    with open(f'{csv_name}.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(lst_header)
-    return "csv created"
-
 
 class Pay:
     def __init__(self, c_first_name, c_last_name):
@@ -219,7 +202,7 @@ class Pay:
         self.expire_date = self.get_expire_date()
         self.tracking_code = random_number_with_n_digits(10)  # code peygiri az taraf banke 10 raghami
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.Transaction = self.Transaction_info(c_first_name, c_last_name)
+        self.transaction_info(c_first_name, c_last_name)
     def get_card_number(self): #password chon hichi nadasht felan naneveshtamesh
         count = 0
         while count <= 2 and self.confirm_card_number:
@@ -269,7 +252,7 @@ class Pay:
             return expire_date
         self.confirm_expire_date = False
         return expire_date
-    def Transaction_info(self, first_name, last_name):
+    def transaction_info(self, first_name, last_name):
         with open('notes.txt', 'w') as f:
             f.write(f'First Name: {first_name}\nLast Name: {last_name}\n')
         if not self.confirm_card_number:
@@ -302,7 +285,6 @@ class Pay:
 
 
 #pay = Pay(customer.first_name, customer.last_name)
-
 
 
 
@@ -380,7 +362,7 @@ class Address:
         print("Available delivery times:")
         try:
             df = pd.read_csv("delivery_time.csv")
-        except FileNotFoundError:
+        except:
             create_csv("delivery_time", ["sobh", "zohr", "asr"])
             df = pd.read_csv("delivery_time.csv")
         zohr_capacity = df.iloc[:, 1:].sum()[0]
@@ -408,69 +390,31 @@ class Address:
 address = Address()
 
 
-"""
-class Factor:
-    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
-"""
-    def remove_from_cart(self, item, number) : 
-        first_number = self.my_cart[str(item)][0]
-        if number > first_number :
-            print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
-
-        elif number == first_number :
-            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
-            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
-            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
-            del self.my_cart[str(item)]
-
-        else : 
-            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] += number
-            self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
-            self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
-            remaining_nmber = first_number - number
-            self.my_cart[str(item)] = (remaining_nmber, remaining_nmber * item.price)
-            print(f"you removed {number} number(s) of this item and now there is {remaining_nmber} number(s) remeining in your cart")
-
-    def show_my_cart(self) :
-        print(self.my_cart)
-
-    def empty_my_cart(self) : 
-        for i in self.my_cart :
-            self.warehouse_items.loc[self.warehouse_items["name"] == i, "stock"] += i[0]
-
-        self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
-        self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
-        self.my_cart.clear()
-
-    def total_cost(self) : 
-        if len(self.my_cart) == 0 :
-            return 0
-        else :
-            items_value = 0
-            for i in self.my_cart.values() :
-                items_value += i[2]
-
-            return items_value
+class Accounting:
+    def __init__(self, cart, tracking_code, delivery_price):
+        self.count_items = cart.total_quantity()
+        self.total_cost_products = cart.total_cost()
+        self.tax = self.total_cost_products * 0.09
+        self.tracking_code = tracking_code
+        self.delivery_price = delivery_price
         
-    def total_quantity(self) :
-        if len(self.my_cart) == 0 :
-            return 0
-        else :
-            items_quantity = 0
-            for i in self.my_cart.values() :
-                items_quantity += i[0]
-            return items_quantity
-        
-        
+    def add_order(self):
+        try:
+            df = pd.read_csv("accounting.csv")
+        except FileNotFoundError:
+            create_csv("accounting", ["tracking_code", "count_products", "products_price", "delivery_price", "tax" ])
+            df = pd.read_csv("accounting.csv")
+            
+        new_row = pd.DataFrame({'tracking_code': [self.tracking_code], 'count_products': [self.count_items],
+                                'products_price': [self.total_cost_products], 'delivery_price'= [self.delivery_price], 'tax' = [self.tax] })
+        df = pd.concat([df, new_row], ignore_index=True)
+        df.to_csv('accounting.csv', index=False)
+        return True
+    
+accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
 
-#class Pay:
-#    def __init__(self, card_number, cvv2, expire_date, gmail= None):
 
-#class Address:
-#    def __init__(self, sharestan, shahr, baze_tahvil, addrees_koli, code_posti, pelak, vahed, phone_number, tahvil_girande):
 
-#class Factor:
-#    def __init__(self, gheymat, ajnas, address,tarikh_sabt_sefaresh ):
 
 warehouse = Warehouse("P1","Iran")
 
@@ -529,3 +473,51 @@ while True :
         
     if choice == 3 :
         break
+
+class Factor:
+    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address):
+        self.item_name_list = list(cart.keys())
+        self.self_item_quantity = [list(cart.values())[x][0] for x in range(len(list(cart.values())))]
+        self.self_item_price = [list(cart.values())[x][1] for x in range(len(list(cart.values())))]
+        self.delivery_time = delivery_time
+        self.tracking_code = tracking_code
+        self.delivery_type = delivery_type
+        self.cfirst_name = cfirst_name
+        self.clast_name = clast_name
+        self.customer_address = customer_address
+        
+    def create_factor(self):
+        items = []
+        for i in range(len(self.item_name_list)):
+            item_name = self.item_name_list[i]
+            item_price = self.self_item_price[i]
+            item_quantity = self.self_item_quantity[i]
+            items.append({"Item Name": item_name, "Price": item_price, "Quantity": item_quantity})
+            
+        total_cost = sum(item["Price"] * item["Quantity"] for item in items)
+
+        invoice = """
+-----------------------------------------
+            SALES FACTOR
+-----------------------------------------
+Tracking Code: {}
+Delivery Time: {}
+Delivery Type: {}
+Customer First Name: {}
+Customer Last Name: {}
+Customer Address: {}
+
+|{:<20} |{:<10} |{:<10} |
+|---------------------|-----------|-----------|
+{}
+------------------------------------------
+Thank you for your purchase!        
+        """.format(self.tracking_code, self.delivery_time, self.delivery_type, self.cfirst_name, self.clast_name ,self.customer_address, total_cost, "Item Name", "Price", "Quantity",
+                "\n".join([f"|{item['Item Name']:<20} |${item['Price']:>9.2f} |{item['Quantity']:>10} |${item['Price']*item['Quantity']:>9.2f}|" for item in items]))
+
+        print(invoice)
+        with open('Factor.txt', 'w') as f:
+            f.write(invoice)
+
+factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, customer.fname, customer.lname, address.overall_address)
+factor.create_factor()
