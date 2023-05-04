@@ -1,56 +1,18 @@
+
 from random import randint
 import re
 from datetime import datetime
 import csv
 import pandas as pd
-
-
-
-
-"""
-class Inventory:
-
-class Customer:
-
-class Admin:
-"""
 class Product:
-    def __init__(self, code, name, price, color, size, material, stock, warehouse):
+    def __init__(self, code, name, price, color, size, material):
         self.code = code
         self.name = name
         self.price = price
         self.color = color
         self.size = size
         self.material = material
-        self.stock = stock
-        #self.warehouse = warehouse
-"""
-    def add_stock(self, amount):
-        self.stock += amount
-    
-    def remove_stock(self, amount):
-        if self.stock - amount < 0:
-            raise ValueError("Not enough stock")
-        self.stock -= amount
 
-    def update_price(self, new_price):
-        self.price = new_price
-        
-    def to_dict(self):
-        return {
-            "code": self.code,
-            "name": self.name,
-            "price": self.price,
-            "color": self.color,
-            "size": self.size,
-            "material": self.material,
-            "stock": self.stock,
-            "warehouse": self.warehouse
-        }
-          
-    def __str__(self):
-        return f"{self.name} - {self.color}, {self.size}, {self.material} (${self.price}) available at {self.warehouse}"
-"""
 class Warehouse:
     def __init__(self, name, location, capacity):
         self.name = name
@@ -68,17 +30,7 @@ class Warehouse:
                 'color': product_obj.color, 'size': product_obj.size, 'material': product_obj.material, 'stock': product_obj.quantity}
         else:
             print("Warehouse is at full capacity.")
-    """
-    #ye def update gheymat bayad neveshte beshe
-    def add_item(self, item_code, item_name, price, color, size, material, quantity):
-        if len(self.products) < self.capacity:
-            if item_code in self.inventory:
-                self.inventory[item_code]['stock'] += quantity
-            else:
-                self.inventory[item_code] = {'item_name': item_name, 'price': price, 'color': color, 'size': size, 'material': material, 'stock': quantity}
-        else:
-            print("Warehouse is at full capacity.")
-    """
+
     def remove_item(self, item_code, quantity):
         if item_code not in self.products:
             return False
@@ -403,7 +355,7 @@ class Factor:
             items.append({"Item Name": item_name, "Price": item_price, "Quantity": item_quantity})
             
         total_cost = sum(item["Price"] * item["Quantity"] for item in items)
-        
+
         invoice = """
 -----------------------------------------
             SALES FACTOR
@@ -426,6 +378,6 @@ Thank you for your purchase!
         print(invoice)
         with open('Factor.txt', 'w') as f:
             f.write(invoice)
-            
+
 factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, customer.fname, customer.lname, address.overall_address)
 factor.create_factor()
