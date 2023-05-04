@@ -327,10 +327,10 @@ class Address:
     def delivery_type(self, state):
         if state == "Tehran":
             delivery_type = "peyk"
-            delivery_price = 30
+            delivery_price = 20
         else:
             delivery_type = "post"
-            delivery_price = 20
+            delivery_price = 30
         return delivery_type, delivery_price
     def delivery_time(self):
         print("Available delivery times:")
