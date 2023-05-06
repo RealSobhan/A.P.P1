@@ -10,12 +10,16 @@ class customer :
         self.email = email        
         self.got_discount = False
     
+    # dar vagheyiat faghat baazi az afrad (anhayi ke code e takhfif darand) shamele takhfif mishavand, baraye shabihsazie in mozu va baraye inke 
+    # betavanim dar in onlineshop ham takhfif dashte bashim function e zir ra taarif mikonim :
     def get_discount(self) :
         discount = uniform(-0.1,0.5)
         first_price = self.shopping_cart.total_cost()
         second_price = first_price * (1 - discount)
         self.got_discount = True
         return second_price        
+    # dar vaghe dar in function be moshtari in emkan dade mishavad ke agar mikhahad dar in ghore keshi sherkat konad 
+    # va agar shans biavarad ta saghfe 50% takhfif begirad, hamchenin 1/6 ehtemal darad ba sherkat dar in ghore keshi gheymat ta saghfe 10% afzayesh yabad
     
     def purchase(self) :
         if self.got_discount == True :
@@ -38,22 +42,25 @@ class customer :
 class Cart:
     
     def __init__(self, warehouse) :
-        self.my_cart = {}
+        self.my_cart = {}  
         self.warehouse = warehouse
         self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
     
     def add_to_cart(self, item, number) : 
-        if self.warehouse_items.loc[self.warehouse_items["name"] == item]["stock"].values[0] >= number :
-            self.my_cart[str(item)] = (number, item.price, float(number * item.price))
-            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] -= number
+        #in shart check mikonad ta moshtari bish az mojudie 1 jens az an be sabade kharide khod ezafe nakonad :
+        if self.warehouse_items.loc[self.warehouse_items["name"] == item]["stock"].values[0] >= number : 
+            self.my_cart[str(item)] = (number, item.price, float(number * item.price)) # taghirat dar dictionary save shavad
+            # dar 3 khate baad taghirate hasel baraye file csv ra emal mikonim
+            self.warehouse_items.loc[self.warehouse_items["name"] == item, "stock"] -= number 
             self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
             self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
             return True
-        else :
-            return False
+        else : 
+            return False  # agar moshtari bekhahad bishtar az mojudi e anbar be sabad ezafe konad False return mishavad
 
     def remove_from_cart(self, item, number) : 
         first_number = self.my_cart[str(item)][0]
+        # check mikonim ta moshtari be ehtebah bishtar az tedadi ke dar sabad kharid hast ra remove nakonad
         if number > first_number :
             print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
 
@@ -78,7 +85,7 @@ class Cart:
         for i in self.my_cart :
             self.warehouse_items.loc[self.warehouse_items["name"] == i, "stock"] += i[0]
 
-        self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
+        self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False) 
         self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
         self.my_cart.clear()
 
@@ -164,6 +171,7 @@ while True :
         print("1.Show available products")
         print("2.Add product to my cart")
         print("3.Show my cart") # az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
+        print('4.search in available products')
         
         
         
