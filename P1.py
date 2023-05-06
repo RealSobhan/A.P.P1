@@ -115,15 +115,16 @@ class Warehouse:
         filtered_df_price = self.products.loc[(self.products['price'] >= min_price) & (self.products['price'] <= max_price)]
         return filtered_df_price
 
-
+# sabade kharide moshtari Cart hast
 class Cart:
     def __init__(self, warehouse):
         self.my_cart = {}
         self.warehouse = warehouse
         self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
-    def add_to_cart(self, item_code, number):
-        if item_code in self.warehouse_items["code"].tolist():
-            if self.warehouse_items.loc[self.warehouse_items["code"] == item_code]["stock"].values[0] >= number:
+    def add_to_cart(self, item_code, number): 
+# dar soorat vojood item code dar list item ha, quantity oon jens ziad mishe, hamchenin farz bar ine ke vaghti fard code jens ro vared kard, baghie voroodi ha ham dorost vared mikone
+        if item_code in self.warehouse_items["code"].tolist(): 
+            if self.warehouse_items.loc[self.warehouse_items["code"] == item_code]["stock"].values[0] >= number: #shart bishtar barnadashtan az forooshgah
                 self.my_cart[item_code] = {"name":self.warehouse_items.loc[self.warehouse_items["code"] == item_code]["name"].values[0],
                                         "color":self.warehouse_items.loc[self.warehouse_items["code"] == item_code]["color"].values[0],
                                         "size":self.warehouse_items.loc[self.warehouse_items["code"] == item_code]["size"].values[0],
@@ -138,18 +139,18 @@ class Cart:
                 print("Please Enter a qauntity that we have!")
         else:
             print("Invalid Code!")
-    def remove_from_cart(self, item_code, number): 
+    def remove_from_cart(self, item_code, number): # shoorte bishtar haz kardan, barabar haz, va kamtar neveshte shode
         first_number = self.my_cart[item_code]["quantity"]
-        if number > first_number :
+        if number > first_number:
             print(f"you can't remove {number} number of this item from your cart, there was only {first_number} number in it.")
 
-        elif number == first_number :
+        elif number == first_number:  # age barabar bood, az cart item kolan bayad pak beshe
             self.warehouse_items.loc[self.warehouse_items["code"] == item_code, "stock"] += number
             self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
             self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
             del self.my_cart[item_code]
 
-        else : 
+        else: 
             self.warehouse_items.loc[self.warehouse_items["code"] == item_code, "stock"] += number
             self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
             self.warehouse_items = pd.read_csv(f"{self.warehouse.name}warehouse.csv")
@@ -161,7 +162,7 @@ class Cart:
         print(self.my_cart)
 
     def empty_my_cart(self) : 
-        for i in self.my_cart :
+        for i in self.my_cart : # ba empty shodane cart, quantity bayad bargardoonde beshe be csv
             self.warehouse_items.loc[self.warehouse_items["code"] == i, "stock"] += i["quantity"]
 
         self.warehouse_items.to_csv(f"{self.warehouse.name}warehouse.csv", index=False)
