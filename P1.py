@@ -89,8 +89,8 @@ class Warehouse:
     def update_quantiy_csv(self, input_csv_address):
         input_csv = pd.read_csv(f"{input_csv_address}")
         merged_df = pd.merge(self.products, input_csv[['code', 'quantity']], on = 'code', how = "left")
-        merged_df['quantity'] = merged_df['quantity'].fillna(self.products['quantity'])
-        self.products['quantity'] = merged_df['quantity']
+        merged_df['quantity'] = merged_df['quantity'].fillna(self.products['stock'])
+        self.products['stock'] = merged_df['quantity']
         self.products.to_csv(f"{self.name}warehouse.csv", index=False)
         return "quantity updated succesfully"
     
@@ -99,10 +99,10 @@ class Warehouse:
         output["warehouse_code"] = 1
         output.to_csv('output.csv', index=False)
     
-    def search_products(self, material=None, color=None, size=None, max_price=None):      #search product ba har meyari!!
-        filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
-                                        & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
-        return filtered_df
+    #def search_products(self, material=None, color=None, size=None, max_price=None):      #search product ba har meyari!!
+    #    filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
+    #                                    & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
+    #    return filtered_df
     
     def get_products_by_color(self, color):
         filtered_df_color = self.products.loc[(self.products['color'] == color)]
@@ -194,7 +194,7 @@ class Cart:
         
 #pay gharare oon safhe vared kardane shomare card va takmil farayand kharid ro shabih sazi kone
 class Pay:
-    def __init__(self, c_first_name, c_last_name, c_cart, ware):
+    def __init__(self, c_first_name, c_last_name):
         self.confirm_card_number = True # 3 flag baraye confirm dorosrt sefaresh gozashte shode, age har 3 True boodan, transaction successfulle
         self.confirm_cvv2 = True
         self.confirm_expire_date = True
@@ -203,7 +203,7 @@ class Pay:
         self.expire_date = self.get_expire_date()
         self.tracking_code = random_number_with_n_digits(11)
         self.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.transaction_info(c_first_name, c_last_name, c_cart, ware) # baraye sakht ye file note be esm "notes.txt" baraye sabt inke transaction movafagh bood ya na
+        self.transaction_info(c_first_name, c_last_name) # baraye sakht ye file note be esm "notes.txt" baraye sabt inke transaction movafagh bood ya na
 
     def get_card_number(self): #password chon hichi nadasht neveshte nashod
         count = 0 
@@ -397,14 +397,15 @@ class Address:
 
 
 class Accounting: # system hesabdari ke faghat sefareshaye movafagh ro tooye ye csv zakhire mikone
-    def __init__(self, cart, tracking_code, delivery_price, c_cart):
+    def __init__(self, cart, tracking_code, delivery_price):
         self.count_items = cart.total_quantity() #tedad ajnas
         self.total_cost_products = cart.total_cost() # cast majmoo
         self.tax = self.total_cost_products * 0.09 # maliat
         self.tracking_code = tracking_code # code rahgiri
         self.delivery_price = delivery_price # mablagh post ya peyk
+        
+    def add_order(self, c_cart):
         c_cart.my_cart.clear() # khali shodan cart, chon tasvie shode
-    def add_order(self):
         try:
             df = pd.read_csv("accounting.csv")
         except FileNotFoundError:
@@ -420,7 +421,7 @@ class Accounting: # system hesabdari ke faghat sefareshaye movafagh ro tooye ye 
     
 
 class Factor:
-    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address): #saakht factor ba maghadiri ke attribute hastan
+    def __init__(self, cart, delivery_time, tracking_code, delivery_type, cfirst_name ,clast_name, customer_address, delivery_price, tax): #saakht factor ba maghadiri ke attribute hastan
         self.item_name_list = list(cart.my_cart[i]["name"] for i in cart.my_cart) # esme item ha
         self.self_item_quantity = list(cart.my_cart[i]["quantity"] for i in cart.my_cart) # tedad har item
         self.self_item_price = list(cart.my_cart[i]["price"] for i in cart.my_cart) # gheymat vahed
@@ -430,6 +431,8 @@ class Factor:
         self.cfirst_name = cfirst_name
         self.clast_name = clast_name
         self.customer_address = customer_address
+        self.delivery_price = delivery_price
+        self.tax = tax
         
     def create_factor(self): # sakht file "Factor.txt"
         items = []
@@ -438,7 +441,7 @@ class Factor:
             item_price = self.self_item_price[i]
             item_quantity = self.self_item_quantity[i]
             items.append({"Item Name": item_name, "Price": item_price, "Quantity": item_quantity})
-        total_cost = sum(item["Price"] * item["Quantity"] for item in items)
+        total_cost = sum(item["Price"] * item["Quantity"] for item in items) + self.delivery_price + self.tax
         invoice = """
 -----------------------------------------------------
                    SALES FACTOR
@@ -454,11 +457,13 @@ Customer Address: {}
 |---------------------|-----------|-----------|
 {}
 ----------------------------------------------------
+Tax: {}
+Delivery Price: {}
 Sum of Costs: {}
 ----------------------------------------------------
 Thank you for your purchase!        
         """.format(self.tracking_code, self.delivery_time, self.delivery_type, self.cfirst_name, self.clast_name ,self.customer_address, "Item Name", "Price", "Quantity", "Cost",
-                "\n".join([f"|{item['Item Name']:<20} |${item['Price']:>9.2f} |{item['Quantity']:>10} |${item['Price']*item['Quantity']:>9.2f}|" for item in items]), total_cost)
+                "\n".join([f"|{item['Item Name']:<20} |${item['Price']:>9.2f} |{item['Quantity']:>10} |${item['Price']*item['Quantity']:>9.2f}|" for item in items]), self.tax, self.delivery_price, total_cost)
         print("Purchase was successfull!")
         with open('Factor.txt', 'w') as f:
             f.write(invoice)
@@ -476,7 +481,8 @@ def admin_scenario():
         print("4.Update warehouse quantity using csv file")
         print("5.Update warehouse quantity manually")
         print("6.Show inventory items")
-        print("7.Exit")
+        print("7.Get output of items in csv fromat")
+        print("8.Exit")
         choice = int(input("Enter your choice here : "))
         if choice == 1:    
             code = int(input("Enter the product code : "))
@@ -514,9 +520,11 @@ def admin_scenario():
             print("Code\tName\t\tMaterial\tcolor     \tSize\tQuantity\tPrice")
             print("----------------------------------------------------------------------------------------")
             for index, row in df.iterrows():
-                print(f"{index}\t{row['name']}\t {row['material']}\t\t {row['color']}     \t {row['size']}\t   {row['stock']}\t\t${row['price']}")
-            
+                print(f"{index}\t{row['name']}\t\t {row['material']}\t\t {row['color']}     \t {row['size']}\t   {row['stock']}\t\t${row['price']}")
         elif choice == 7:
+            warehouse_main.file_output()
+            print("Your file has been created successfully")
+        elif choice == 8:
             break
 
         else:
@@ -539,9 +547,9 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
             print("----------------------------------------------------------------------------------------")
             for index, row in df.iterrows():
                 if row["stock"] == 0: #  unavailable neshoon dadan quantity vaghti 0 e
-                    print(f"{index}\t{row['name']}\t {row['material']}\t\t {row['color']}     \t {row['size']}\t   Unavailable\t\t${row['price']}")
+                    print(f"{index}\t{row['name']}\t\t{row['material']}\t\t {row['color']}     \t {row['size']}\t   Unavailable\t\t${row['price']}")
                 else:
-                    print(f"{index}\t{row['name']}\t {row['material']}\t\t {row['color']}     \t {row['size']}\t   {row['stock']}\t\t${row['price']}")
+                    print(f"{index}\t{row['name']}\t\t{row['material']}\t\t {row['color']}     \t {row['size']}\t   {row['stock']}\t\t${row['price']}")
                     
         elif choice == 2:
             code = int(input("Enter the product code : "))
@@ -578,10 +586,11 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                 pay = Pay(cus_fname, cus_lname)
         #dar in ghesmat age hamechi dorost vared shode bood, factor sakhte mishe va yek seri moshakhasat sefaresh dar csv be esme accounting zakhire mishe
                 if pay.confirm_card_number == True and pay.confirm_cvv2 == True and pay.confirm_expire_date == True:
-                    factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, cus_fname, cus_lname, address.overall_address)
+                    accounting = Accounting(cart, pay.tracking_code, address.delivery_price)
+                    factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, cus_fname, cus_lname, address.overall_address, accounting.delivery_price, accounting.tax)
                     factor.create_factor()
-                    accounting = Accounting(cart, pay.tracking_code, address.delivery_price, cart)
-                    accounting.add_order()
+                    accounting.add_order(cart)
+                    
         elif choice == 4:
             if len(cart.my_cart) != 0:
                 print("you have items in your cart!")
