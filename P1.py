@@ -99,11 +99,6 @@ class Warehouse:
         output["warehouse_code"] = 1
         output.to_csv('output.csv', index=False)
     
-    #def search_products(self, material=None, color=None, size=None, max_price=None):      #search product ba har meyari!!
-    #    filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
-    #                                    & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
-    #    return filtered_df
-    
     def get_products_by_color(self, color):
         filtered_df_color = self.products.loc[(self.products['color'] == color)]
         return filtered_df_color
@@ -482,7 +477,8 @@ def admin_scenario():
         print("5.Update warehouse quantity manually")
         print("6.Show inventory items")
         print("7.Get output of items in csv fromat")
-        print("8.Exit")
+        print("8.Search in items by an attribute")
+        print("9.Exit")
         choice = int(input("Enter your choice here : "))
         if choice == 1:    
             code = int(input("Enter the product code : "))
@@ -525,6 +521,26 @@ def admin_scenario():
             warehouse_main.file_output()
             print("Your file has been created successfully")
         elif choice == 8:
+            print("1.Search by color")
+            print("2.Search by material")
+            print("3.Search by size")
+            print("4.Search by price")
+            choice = int(input("Enter your choice here: "))
+            if choice == 1:
+                color = input("Enter the color that you want search for it:")
+                print(warehouse_main.get_products_by_color(color))
+            elif choice == 2:
+                material = input("Enter the material that you want search for it:")
+                print(warehouse_main.get_products_by_material(material))
+            elif choice == 3:
+                size = input("Enter the color that you want search for it:")
+
+                print(warehouse_main.get_products_by_size(size))
+            elif choice == 4:
+                maximum = int(input("Enter the maximum price that you search for:"))
+                minimum = int(input("Enter the minimum price that you search for:"))
+                print(warehouse_main.get_products_by_price_range(minimum, maximum))
+        elif choice == 9:
             break
 
         else:
@@ -605,24 +621,21 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                 print(warehouse_main.get_products_by_material(material))
             elif choice == 3:
                 size = input("Enter the color that you want search for it:")
-                #try:
-                #    size = int(size)
+
                 print(warehouse_main.get_products_by_size(size))
-                #except:
-                #    print(warehouse_main.get_products_by_color(size))
             elif choice == 4:
                 maximum = int(input("Enter the maximum price that you search for:"))
                 minimum = int(input("Enter the minimum price that you search for:"))
                 print(warehouse_main.get_products_by_price_range(minimum, maximum))
-
-
-
                     
         elif choice == 5:
             if len(cart.my_cart) != 0:
                 print("you have items in your cart!")
             else:
                 break
+        else:
+            print("Enter valid choice")
+
             
                 
 # loop avalie ke bar asas entekhab user, def admin ya customer seda zade mishe
