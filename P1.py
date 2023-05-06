@@ -34,7 +34,7 @@ class Product:
         self.name = name 
         self.price = price
         self.color = color
-        self.size = size # masalan xl, xxl 
+        self.size = size # masalan xl, xxl ya 40 (size kafsh ya shalvar)
         self.material = material
         
 """
@@ -599,7 +599,18 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
             choice = int(input("Enter your choice here: "))
             if choice == 1:
                 color = input("Enter the color that you want search for it:")
-                
+                print(warehouse_main.get_products_by_color(color))
+            elif choice == 2:
+                material = input("Enter the material that you want search for it:")
+                print(warehouse_main.get_products_by_material(material))
+            elif choice == 3:
+                size = input("Enter the color that you want search for it:")
+                try:
+                    size = int(size)
+                    print(warehouse_main.get_products_by_color(size))
+                except:
+                    print(warehouse_main.get_products_by_color(size))
+
                     
         elif choice == 5:
             if len(cart.my_cart) != 0:
