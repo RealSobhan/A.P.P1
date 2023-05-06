@@ -610,6 +610,12 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                     print(warehouse_main.get_products_by_color(size))
                 except:
                     print(warehouse_main.get_products_by_color(size))
+            elif choice == 4:
+                maximum = int(input("Enter the maximum price that you search for:"))
+                minimum = int(input("Enter the minimum price that you search for:"))
+                print(warehouse_main.get_products_by_price_range(minimum, maximum))
+
+
 
                     
         elif choice == 5:
