@@ -539,7 +539,8 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
         print("1.Show available products")
         print("2.Add product to my cart")
         print("3.Show my cart")
-        print("4.Exit")# az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
+        print("4.Search in items by an attribute")
+        print("5.Exit")# az in gozine mishavad pardakht kard va product ha ra az cart hazf konim
         choice = int(input("Enter your choice here : "))
         if choice == 1:
             df = warehouse.products.set_index('code')
@@ -590,8 +591,17 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                     factor = Factor(cart, address.delivery_time, pay.tracking_code, address.delivery_type, cus_fname, cus_lname, address.overall_address, accounting.delivery_price, accounting.tax)
                     factor.create_factor()
                     accounting.add_order(cart)
-                    
         elif choice == 4:
+            print("1.Search by color")
+            print("2.Search by material")
+            print("3.Search by size")
+            print("4.Search by price")
+            choice = int(input("Enter your choice here: "))
+            if choice == 1:
+                color = input("Enter the color that you want search for it:")
+                
+                    
+        elif choice == 5:
             if len(cart.my_cart) != 0:
                 print("you have items in your cart!")
             else:
