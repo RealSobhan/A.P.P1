@@ -605,11 +605,11 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                 print(warehouse_main.get_products_by_material(material))
             elif choice == 3:
                 size = input("Enter the color that you want search for it:")
-                try:
-                    size = int(size)
-                    print(warehouse_main.get_products_by_color(size))
-                except:
-                    print(warehouse_main.get_products_by_color(size))
+                #try:
+                #    size = int(size)
+                print(warehouse_main.get_products_by_size(size))
+                #except:
+                #    print(warehouse_main.get_products_by_color(size))
             elif choice == 4:
                 maximum = int(input("Enter the maximum price that you search for:"))
                 minimum = int(input("Enter the minimum price that you search for:"))
