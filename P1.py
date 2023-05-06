@@ -99,11 +99,6 @@ class Warehouse:
         output["warehouse_code"] = 1
         output.to_csv('output.csv', index=False)
     
-    #def search_products(self, material=None, color=None, size=None, max_price=None):      #search product ba har meyari!!
-    #    filtered_df = self.products.loc[(self.products['material'] == material) & (self.products['color'] == color)
-    #                                    & (self.products['size'] == size) & (self.products['max_price'] == max_price)]
-    #    return filtered_df
-    
     def get_products_by_color(self, color):
         filtered_df_color = self.products.loc[(self.products['color'] == color)]
         return filtered_df_color
@@ -605,18 +600,12 @@ def customer_scenario(cus_fname, cus_lname, warehouse):
                 print(warehouse_main.get_products_by_material(material))
             elif choice == 3:
                 size = input("Enter the color that you want search for it:")
-                try:
-                    size = int(size)
-                    print(warehouse_main.get_products_by_color(size))
-                except:
-                    print(warehouse_main.get_products_by_color(size))
+
+                print(warehouse_main.get_products_by_sizer(size))
             elif choice == 4:
                 maximum = int(input("Enter the maximum price that you search for:"))
                 minimum = int(input("Enter the minimum price that you search for:"))
                 print(warehouse_main.get_products_by_price_range(minimum, maximum))
-
-
-
                     
         elif choice == 5:
             if len(cart.my_cart) != 0:
